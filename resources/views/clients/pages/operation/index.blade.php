@@ -111,6 +111,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>Date</th>
+                                <th>Code budget</th>
                                 <th>Ligne budget</th>
                                 <th>Libellé</th>
                                 <th>Montant</th>
@@ -122,6 +123,7 @@
                                 <tr>
                                     <td>{{ $operation->id }}</td>
                                     <td>{{ $operation->date }}</td>
+                                    <td>{{ $operation->ligneBudget->code }}</td>
                                     <td>{{ $operation->ligneBudget->intitule }}</td>
                                     <td>{{ $operation->libelle }}</td>
                                     <td>{{ $operation->amount }}</td>

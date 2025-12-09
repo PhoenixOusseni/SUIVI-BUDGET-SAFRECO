@@ -51,7 +51,8 @@
         @php
             // Formatting helpers
             $fmtAmount = fn($v) => $v !== null && $v != 0.0 ? number_format((float) $v, 0, ',', ' ') : '';
-            $fmtPercent = fn($v) => $v === null ? '' : number_format($v * 100, 1) . '%';
+            // Calculer le taux restant (100% - taux d'exécution)
+            $fmtPercent = fn($v) => $v === null ? '' : number_format((1 - $v) * 100, 1) . '%';
 
             // color by rate: >=95% green, 85-94.99% yellow, <85% red. null = grey
             $ratesClass = function ($rate) {
