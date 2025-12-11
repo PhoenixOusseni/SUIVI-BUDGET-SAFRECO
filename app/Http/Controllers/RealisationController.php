@@ -202,7 +202,7 @@ class RealisationController extends Controller
             DB::transaction(function () use ($realisation) {
                 // Supprimer tous les mois associés à cette réalisation
                 RealisationMonth::where('realisation_id', $realisation->id)->delete();
-                
+
                 // Supprimer la réalisation elle-même
                 $realisation->delete();
             });
@@ -215,5 +215,56 @@ class RealisationController extends Controller
                 ->back()
                 ->withErrors(['error' => 'Erreur lors de la suppression : ' . $e->getMessage()]);
         }
+    }
+
+    /**
+     * Imprimer les réalisations
+     */
+    public function print(Request $request)
+    {
+        // Année filtrée (default = current year)
+        $year = (int) $request->input('year', date('Y'));
+        $ligneBudgetId = $request->input('ligne_budget_id');
+
+        // Query de base
+        $query = Realisation::with(['months', 'ligneBudget'])
+            ->where('year', $year);
+
+        // Filtre par ligne budgétaire si spécifié
+        if ($ligneBudgetId) {
+            $query->where('ligne_budget_id', $ligneBudgetId);
+        }
+
+        $realisations = $query->get();
+
+        // Grouper par id de ligne budgétaire
+        $grouped = $realisations->groupBy('ligne_budget_id');
+
+        // Charger les lignes budgétaires concernées
+        $ligneIds = $grouped->keys()->filter()->all();
+        $lignes = LigneBudget::whereIn('id', $ligneIds)->get()->keyBy('id');
+
+        // Labels des mois
+        $monthsLabels = [
+            1 => 'Janvier',
+            2 => 'Février',
+            3 => 'Mars',
+            4 => 'Avril',
+            5 => 'Mai',
+            6 => 'Juin',
+            7 => 'Juillet',
+            8 => 'Août',
+            9 => 'Septembre',
+            10 => 'Octobre',
+            11 => 'Novembre',
+            12 => 'Décembre',
+        ];
+
+        return view('clients.pages.data.realisation.print_realisation', [
+            'groupedRealisations' => $grouped,
+            'lignesMap' => $lignes,
+            'year' => $year,
+            'monthsLabels' => $monthsLabels,
+        ]);
     }
 }

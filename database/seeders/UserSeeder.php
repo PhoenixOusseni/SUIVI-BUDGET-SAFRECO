@@ -22,6 +22,13 @@ class UserSeeder extends Seeder
                 'email' => 's-admin@gmail.com',
                 'password' => Hash::make('password'),
             ],
+            [
+                'nom' => 'KOUDOUGOU',
+                'prenom' => 'Rasmane',
+                'telephone' => '123456789',
+                'email' => 'rasmane.koudougou@gmail.com',
+                'password' => Hash::make('password'),
+            ],
         ]);
     }
 }

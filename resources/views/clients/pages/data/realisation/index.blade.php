@@ -45,11 +45,20 @@
                             </div>
                         </form>
                     </div>
-                    <div class="col-md-2">
-                        {{-- Export Button --}}
-                        <a href="#" class="btn btn-success">
-                            <i class="fas fa-file-export"></i>&nbsp;&nbsp; Exporter
-                        </a>
+                    <div class="d-flex gap-2">
+                        <div class="">
+                            {{-- Export Button --}}
+                            <a href="#" class="btn btn-success">
+                                <i class="fas fa-file-export"></i>&nbsp;&nbsp; Exporter
+                            </a>
+                        </div>
+                        <div class="">
+                            {{-- Print Button --}}
+                            <a href="{{ route('realisations.print', ['year' => request('year', date('Y')), 'ligne_budget_id' => request('ligne_budget_id')]) }}"
+                                class="btn btn-success" target="_blank">
+                                <i class="fas fa-print"></i>&nbsp;&nbsp; Imprimer
+                            </a>
+                        </div>
                     </div>
                 </div>
                 {{-- Realisations Table --}}
@@ -75,7 +84,8 @@
                 @endphp
 
                 <div class="table-responsive" style="max-height:70vh; overflow:auto;">
-                    <table class="table table-bordered table-hover table-striped table-sm table-exec align-middle mb-0" style="min-width:1600px;">
+                    <table class="table table-bordered table-hover table-striped table-sm table-exec align-middle mb-0"
+                        style="min-width:1600px;">
                         <thead class="table-light" style="position:sticky; top:0; z-index:5;">
                             <tr>
                                 <th style="width:140px">CODE</th>
@@ -108,7 +118,7 @@
                                             $rowMonths[(int) $pm->month] = (float) $pm->amount;
                                         }
                                     }
-                                    
+
                                     // Calcul total ligne
                                     $rowTotal = array_sum($rowMonths);
 

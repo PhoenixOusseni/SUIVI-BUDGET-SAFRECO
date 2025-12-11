@@ -10,7 +10,7 @@
     <div class="container">
         <!-- Logo -->
         <a class="navbar-brand" href="{{ route('home') }}">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo" width="100" height="50">
+            <img src="{{ asset('images/images.jpg') }}" alt="Logo" width="100" height="50">
         </a>
         <!-- Menu -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -24,9 +24,11 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="nav-link" href="{{ route('budget.index') }}">Suivi budgétaire</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('budget.execution') }}">Suivi du taux d’exécution du
+                        <li class="nav-item"><a class="nav-link" href="{{ route('budget.execution') }}">Suivi du taux
+                                d’exécution du
                                 budgétaire</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('budget.consommation') }}">Suivi du taux de consommation des
+                        <li class="nav-item"><a class="nav-link" href="{{ route('budget.consommation') }}">Suivi du taux
+                                de consommation des
                                 subventions</a></li>
                     </ul>
                 </li>
@@ -35,10 +37,14 @@
                         SUIVI TRESORERIE
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li class="nav-item"><a class="nav-link" href="{{ route('tresorerie.depenses_rations') }}">Suivi des dépenses en termes de
+                        <li class="nav-item"><a class="nav-link" href="{{ route('tresorerie.depenses_rations') }}">Suivi
+                                des dépenses en termes de
                                 rations</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('tresorerie.situation_financiere') }}">Suivi de la situation financière</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('gestion_operations.index') }}">Saisie des operations</a></li>
+                        <li class="nav-item"><a class="nav-link"
+                                href="{{ route('tresorerie.situation_financiere') }}">Suivi de la situation
+                                financière</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('gestion_operations.index') }}">Saisie
+                                des operations</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -46,8 +52,11 @@
                         SUIVI ENGAGEMENTS
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li class="nav-item"><a class="nav-link" href="{{ route('engagement.suivi_fournisseurs') }}">Suivi des fournisseurs</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('engagement.suivi_audits') }}">Suivi des audits traitées</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('gestion_taches.index') }}">Saisi des taches</a></li>
+                        <li class="nav-item"><a class="nav-link"
+                                href="{{ route('engagement.suivi_fournisseurs') }}">Suivi des fournisseurs</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('engagement.suivi_audits') }}">Suivi des
+                                audits traitées</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">

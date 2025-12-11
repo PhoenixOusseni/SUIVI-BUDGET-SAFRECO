@@ -15,7 +15,7 @@
         }
 
         .top-bar {
-            background: linear-gradient(40deg, #f3934f, #d54e14);
+            background: #003d82;
             color: #fff;
             font-weight: bold;
             padding: 5px 0;
@@ -31,7 +31,6 @@
             font-weight: bold;
             font-size: 1.8rem;
         }
-
         .page-title::after {
             content: "";
             display: block;
@@ -48,7 +47,9 @@
 
     <!-- Contenu principal -->
     <div class="container" style="min-height: 100vh; height: auto;">
+
         @yield('content')
+
     </div>
 
     <!-- FOOTER -->

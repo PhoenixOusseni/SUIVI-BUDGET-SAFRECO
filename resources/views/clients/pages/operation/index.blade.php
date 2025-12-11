@@ -122,7 +122,7 @@
                             @foreach ($operations as $operation)
                                 <tr>
                                     <td>{{ $operation->id }}</td>
-                                    <td>{{ $operation->date }}</td>
+                                    <td>{{ $operation->date ? \Carbon\Carbon::parse($operation->date)->format('d/m/Y') : '' }}</td>
                                     <td>{{ $operation->ligneBudget->code }}</td>
                                     <td>{{ $operation->ligneBudget->intitule }}</td>
                                     <td>{{ $operation->libelle }}</td>

@@ -10,16 +10,18 @@
 
     <div class="d-flex justify-content-between align-items-center mb-3 mt-3">
         <h3 class="mb-0 text-danger">Situation Financière — Année {{ $year }}</h3>
-        <form class="d-flex" method="GET" action="#">
-            <select name="year" class="form-select me-2" style="min-width: 250px">
-                @for ($y = date('Y') - 3; $y <= date('Y') + 3; $y++)
-                    <option value="{{ $y }}" {{ $y == $year ? 'selected' : '' }}>{{ $y }}</option>
-                @endfor
-            </select>
-            <button class="btn btn-outline-primary">
-                <i class="fas fa-filter"></i>&nbsp;Filtrer
-            </button>
-        </form>
+        <div class="d-flex gap-2">
+            <form class="d-flex" method="GET" action="#">
+                <select name="year" class="form-select me-2" style="min-width: 250px">
+                    @for ($y = date('Y') - 3; $y <= date('Y') + 3; $y++)
+                        <option value="{{ $y }}" {{ $y == $year ? 'selected' : '' }}>{{ $y }}</option>
+                    @endfor
+                </select>
+                <button class="btn btn-outline-primary">
+                    <i class="fas fa-filter"></i>&nbsp;Filtrer
+                </button>
+            </form>
+        </div>
     </div>
 
     @php
@@ -81,7 +83,20 @@
     {{-- Premier tableau : Montant et Consommation --}}
     <div class="card mb-5">
         <div class="card-body">
-            <h3 class="mb-3 text-success">Etat du suivi de la situation financière </h3>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="mb-0 text-danger"></h3>
+                <div>
+                    <a href="{{ route('tresorerie.export_excel') }}?year={{ $year }}" class="btn btn-success">
+                        <i class="fas fa-file-excel"></i>&nbsp;&nbsp;Exporter vers Excel
+                    </a>
+                    <a href="{{ route('tresorerie.print_situation_financiere') }}?year={{ $year }}" target="_blank"
+                        class="btn btn-success">
+                        <i class="fas fa-print"></i>&nbsp;&nbsp;Imprimer
+                    </a>
+                </div>
+            </div>
+
+            <h3 class="mb-3 text-success">Etat du suivi de la situation financière</h3>
             <div class="table-responsive">
                 <table class="table table-bordered table-sm table-exec" style="min-width:2500px;">
                     <colgroup>
@@ -179,40 +194,40 @@
                                 @for ($mo = 1; $mo <= 12; $mo++)
                                     @php
                                         // Calculer l'écart du mois actuel
-                                        $montant = $row['preMonths'][$mo] ?? 0;
-                                        $cons = $row['consMonths'][$mo] ?? 0;
-                                        $ecartActuel = $montant - $cons;
+$montant = $row['preMonths'][$mo] ?? 0;
+$cons = $row['consMonths'][$mo] ?? 0;
+$ecartActuel = $montant - $cons;
 
-                                        // Calculer les cumuls des 3 mois suivants (ex: pour Janvier = Fév + Mars + Avril)
-                                        $cumul3Mois = 0; // Cumul des 3 mois suivants
-                                        $cumul2Mois = 0; // Cumul de 2 mois suivants
+// Calculer les cumuls des 3 mois suivants (ex: pour Janvier = Fév + Mars + Avril)
+$cumul3Mois = 0; // Cumul des 3 mois suivants
+$cumul2Mois = 0; // Cumul de 2 mois suivants
 
-                                        // Vérifier les 3 mois suivants
-                                        for ($i = 1; $i <= 3; $i++) {
-                                            $nextMonth = $mo + $i;
-                                            if ($nextMonth <= 12) {
-                                                $montantNext = $row['preMonths'][$nextMonth] ?? 0;
-                                                $consNext = $row['consMonths'][$nextMonth] ?? 0;
-                                                $ecartNext = $montantNext - $consNext;
+// Vérifier les 3 mois suivants
+for ($i = 1; $i <= 3; $i++) {
+    $nextMonth = $mo + $i;
+    if ($nextMonth <= 12) {
+        $montantNext = $row['preMonths'][$nextMonth] ?? 0;
+        $consNext = $row['consMonths'][$nextMonth] ?? 0;
+        $ecartNext = $montantNext - $consNext;
 
-                                                // Cumuler pour les 3 mois
-                                                $cumul3Mois += $ecartNext;
+        // Cumuler pour les 3 mois
+        $cumul3Mois += $ecartNext;
 
-                                                // Cumuler pour les 2 premiers mois seulement
-                                                if ($i <= 2) {
-                                                    $cumul2Mois += $ecartNext;
-                                                }
-                                            }
-                                        }
+        // Cumuler pour les 2 premiers mois seulement
+        if ($i <= 2) {
+            $cumul2Mois += $ecartNext;
+        }
+    }
+}
 
-                                        // Déterminer la couleur selon les conditions
-                                        $colorClass = '';
+// Déterminer la couleur selon les conditions
+$colorClass = '';
 
-                                        // Vert : écart actuel > cumul 3 mois suivants
-                                        if ($ecartActuel > $cumul3Mois) {
-                                            $colorClass = 'bg-success text-success';
-                                        }
-                                        // Jaune : écart actuel entre cumul 2 mois et cumul 3 mois (ou égal à l'un des deux)
+// Vert : écart actuel > cumul 3 mois suivants
+if ($ecartActuel > $cumul3Mois) {
+    $colorClass = 'bg-success text-success';
+}
+// Jaune : écart actuel entre cumul 2 mois et cumul 3 mois (ou égal à l'un des deux)
                                         elseif ($ecartActuel >= $cumul2Mois && $ecartActuel <= $cumul3Mois) {
                                             $colorClass = 'bg-warning text-warning';
                                         }
@@ -260,7 +275,8 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td>< 2 mois</td>
+                        <td>
+                            < 2 mois</td>
                         <td></td>
                         <td></td>
                         <td class="bg-danger"></td>

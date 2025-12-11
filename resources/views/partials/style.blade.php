@@ -34,7 +34,7 @@
     }
 
     footer {
-        background-color: #111;
+        background-color: #003d82;
         color: #fff;
         padding: 15px;
         position: relative;

@@ -45,11 +45,20 @@
                             </div>
                         </form>
                     </div>
-                    <div class="col-md-2">
-                        {{-- Export Button --}}
-                        <a href="#" class="btn btn-success">
-                            <i class="fas fa-file-export"></i>&nbsp;&nbsp; Exporter
-                        </a>
+                    <div class="d-flex gap-2">
+                        <div class="">
+                            {{-- Export Button --}}
+                            <a href="#" class="btn btn-success">
+                                <i class="fas fa-file-export"></i>&nbsp;&nbsp; Exporter
+                            </a>
+                        </div>
+                        <div class="">
+                            {{-- Print Button --}}
+                            <a href="{{ route('previsions.print', ['year' => request('year', date('Y')), 'ligne_budget_id' => request('ligne_budget_id')]) }}"
+                                class="btn btn-success" target="_blank">
+                                <i class="fas fa-print"></i>&nbsp;&nbsp; Imprimer
+                            </a>
+                        </div>
                     </div>
                 </div>
                 {{-- Previsions Table --}}

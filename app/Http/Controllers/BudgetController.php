@@ -369,4 +369,113 @@ class BudgetController extends Controller
 
         return view('clients.pages.suivi_budgetaire.taux_consommation', compact('year', 'monthsLabels', 'rows'));
     }
+
+    /**
+     * Imprimer le suivi budgétaire
+     */
+    public function print(Request $request)
+    {
+        $year = (int) $request->input('year', date('Y'));
+
+        // Charger toutes les prévisions de l'année avec leurs months et la ligne budgétaire + rubrique
+        $previsions = Prevision::with(['months', 'ligneBudget.codeBudget.rubrique'])
+            ->where('year', $year)->get();
+
+        $encaissementsByRubrique = [];
+        $decaissementsByRubrique = [];
+
+        // Helper: construit tableau months 1..12 initialisé à 0
+        $buildRowMonths = function ($prevision) {
+            $row = array_fill(1, 12, 0.0);
+            if (!$prevision) {
+                return $row;
+            }
+            if ($prevision->relationLoaded('months')) {
+                foreach ($prevision->months as $pm) {
+                    $m = (int) $pm->month;
+                    if ($m >= 1 && $m <= 12) {
+                        $row[$m] = (float) $pm->amount;
+                    }
+                }
+            } else {
+                foreach ($prevision->months()->get() as $pm) {
+                    $m = (int) $pm->month;
+                    if ($m >= 1 && $m <= 12) {
+                        $row[$m] = (float) $pm->amount;
+                    }
+                }
+            }
+            return $row;
+        };
+
+        // Parcourir les prévisions et les classer par groupe (Décaissement/Encaissement) et rubrique
+        foreach ($previsions as $prevision) {
+            $cb = $prevision->ligneBudget ?? null;
+            if ($cb) {
+                $ligneCode = $cb->code ?? null;
+                $ligneLabel = $cb->intitule ?? ($cb->name ?? null);
+
+                $rub = $cb->rubrique ?? null;
+                $rubId = $rub->id ?? null;
+
+                // déterminer le groupe en se basant uniquement sur l'id de la rubrique
+                $rubId = isset($rub->id) ? (int) $rub->id : null;
+
+                $group = $rubId === 1 ? 'Encaissements' : 'Décaissements';
+
+                // clé de regroupement pour affichage par rubrique
+                $rubriqueIdKey = $rubId ? 'rub-' . $rubId : 'cb-' . $cb->id;
+                $rubriqueLabel = $rub->libelle ?? ($rub->name ?? ($cb->intitule ?? ($cb->name ?? ($cb->code ?? "Ligne {$cb->id}"))));
+            }
+
+            // préparer mois/total
+            $rowMonths = $buildRowMonths($prevision);
+            $rowTotal = array_sum($rowMonths);
+
+            $item = [
+                'ligne_id' => $cb->id ?? null,
+                'ligne_code' => $ligneCode,
+                'ligne_label' => $ligneLabel,
+                'prevision_id' => $prevision->id,
+                'months' => $rowMonths,
+                'total' => $rowTotal,
+                'prevision' => $prevision,
+            ];
+
+            // Ajouter selon le code de la ligne budgétaire
+            if ($ligneCode && strpos($ligneCode, 'A.1') !== false) {
+                if (!isset($encaissementsByRubrique[$rubriqueIdKey])) {
+                    $encaissementsByRubrique[$rubriqueIdKey] = ['label' => $rubriqueLabel, 'items' => []];
+                }
+                $encaissementsByRubrique[$rubriqueIdKey]['items'][] = $item;
+            } elseif ($ligneCode && strpos($ligneCode, 'A.2') !== false) {
+                if (!isset($decaissementsByRubrique[$rubriqueIdKey])) {
+                    $decaissementsByRubrique[$rubriqueIdKey] = ['label' => $rubriqueLabel, 'items' => []];
+                }
+                $decaissementsByRubrique[$rubriqueIdKey]['items'][] = $item;
+            }
+        }
+
+        $monthsLabels = [
+            1 => 'Janvier',
+            2 => 'Février',
+            3 => 'Mars',
+            4 => 'Avril',
+            5 => 'Mai',
+            6 => 'Juin',
+            7 => 'Juillet',
+            8 => 'Août',
+            9 => 'Septembre',
+            10 => 'Octobre',
+            11 => 'Novembre',
+            12 => 'Décembre',
+        ];
+
+        return view('clients.pages.suivi_budgetaire.print_suivi_budget', [
+            'year' => $year,
+            'monthsLabels' => $monthsLabels,
+            'encaissementsByRubrique' => $encaissementsByRubrique,
+            'decaissementsByRubrique' => $decaissementsByRubrique,
+        ]);
+    }
 }

@@ -467,4 +467,55 @@ class PrevisionController extends Controller
                 ->withErrors(['error' => 'Erreur lors de la suppression : ' . $e->getMessage()]);
         }
     }
+
+    /**
+     * Imprimer les prévisions
+     */
+    public function print(Request $request)
+    {
+        // Année filtrée (default = current year)
+        $year = (int) $request->input('year', date('Y'));
+        $ligneBudgetId = $request->input('ligne_budget_id');
+
+        // Query de base
+        $query = Prevision::with(['months', 'ligneBudget'])
+            ->where('year', $year);
+
+        // Filtre par ligne budgétaire si spécifié
+        if ($ligneBudgetId) {
+            $query->where('ligne_budget_id', $ligneBudgetId);
+        }
+
+        $previsions = $query->get();
+
+        // Grouper par id de ligne budgétaire
+        $grouped = $previsions->groupBy('ligne_budget_id');
+
+        // Charger les lignes budgétaires concernées
+        $ligneIds = $grouped->keys()->filter()->all();
+        $lignes = LigneBudget::whereIn('id', $ligneIds)->get()->keyBy('id');
+
+        // Labels des mois
+        $monthsLabels = [
+            1 => 'Janvier',
+            2 => 'Février',
+            3 => 'Mars',
+            4 => 'Avril',
+            5 => 'Mai',
+            6 => 'Juin',
+            7 => 'Juillet',
+            8 => 'Août',
+            9 => 'Septembre',
+            10 => 'Octobre',
+            11 => 'Novembre',
+            12 => 'Décembre',
+        ];
+
+        return view('clients.pages.data.prevision.print_prevision', [
+            'groupedPrevisions' => $grouped,
+            'lignesMap' => $lignes,
+            'year' => $year,
+            'monthsLabels' => $monthsLabels,
+        ]);
+    }
 }

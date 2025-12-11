@@ -22,6 +22,19 @@
             </form>
         </div>
 
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="mb-0 text-danger"></h3>
+            <div>
+                <a href="{{ route('tresorerie.export_excel') }}?year={{ $year }}" class="btn btn-success">
+                    <i class="fas fa-file-excel"></i>&nbsp;&nbsp;Exporter vers Excel
+                </a>
+                <a href="{{ route('tresorerie.print_situation_financiere') }}?year={{ $year }}" target="_blank"
+                    class="btn btn-success">
+                    <i class="fas fa-print"></i>&nbsp;&nbsp;Imprimer
+                </a>
+            </div>
+        </div>
+
         @php
             // Formatting helpers
             $fmtAmount = fn($v) => $v !== null && $v != 0.0 ? number_format((float) $v, 0, ',', ' ') : '';

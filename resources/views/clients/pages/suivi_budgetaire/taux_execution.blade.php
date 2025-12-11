@@ -24,6 +24,19 @@
             </form>
         </div>
 
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="mb-0 text-danger"></h3>
+            <div>
+                <a href="{{ route('tresorerie.export_excel') }}?year={{ $year }}" class="btn btn-success">
+                    <i class="fas fa-file-excel"></i>&nbsp;&nbsp;Exporter vers Excel
+                </a>
+                <a href="{{ route('tresorerie.print_situation_financiere') }}?year={{ $year }}" target="_blank"
+                    class="btn btn-success">
+                    <i class="fas fa-print"></i>&nbsp;&nbsp;Imprimer
+                </a>
+            </div>
+        </div>
+
         @php
             // Formatting helpers
             $fmtAmount = fn($v) => $v !== null && $v != 0.0 ? number_format((float) $v, 0, ',', ' ') : '';
@@ -52,7 +65,7 @@
             // Formatting helpers
             $fmtAmount = fn($v) => $v !== null && $v != 0.0 ? number_format((float) $v, 0, ',', ' ') : '';
             // Calculer le taux restant (100% - taux d'exécution)
-            $fmtPercent = fn($v) => $v === null ? '' : number_format((1 - $v) * 100, 1) . '%';
+$fmtPercent = fn($v) => $v === null ? '' : number_format((1 - $v) * 100, 1) . '%';
 
             // color by rate: >=95% green, 85-94.99% yellow, <85% red. null = grey
             $ratesClass = function ($rate) {
@@ -91,7 +104,9 @@
                                 <th rowspan="2">Code</th>
                                 <th rowspan="2" class="libelle-col">Libellés</th>
                                 @foreach ($monthsLabels as $m)
-                                    <th colspan="3" style="background: rgba(243, 144, 83, 0.71); border-right: 1px solid #000;">{{ $m }}</th>
+                                    <th colspan="3"
+                                        style="background: rgba(243, 144, 83, 0.71); border-right: 1px solid #000;">
+                                        {{ $m }}</th>
                                 @endforeach
                             </tr>
                             <tr>
@@ -149,7 +164,9 @@
                                 <th rowspan="2">Code</th>
                                 <th rowspan="2" class="libelle-col">Libellés</th>
                                 @foreach ($monthsLabels as $m)
-                                    <th colspan="2" style="background: rgba(243, 144, 83, 0.71); border-right: 1px solid #000;">{{ $m }}</th>
+                                    <th colspan="2"
+                                        style="background: rgba(243, 144, 83, 0.71); border-right: 1px solid #000;">
+                                        {{ $m }}</th>
                                 @endforeach
                             </tr>
                             <tr>
@@ -174,7 +191,8 @@
                                         <td class="text-end" style="min-width:100px;">
                                             {{ number_format($row['ecarts'][$mo] ?? ' ', 0, ',', ' ') }}</td>
                                         @php $var = $row['taux'][$mo]; @endphp
-                                        <td class="text-center {{ $ratesClass($var) }}" style="border-right: 1px solid #000;">{{ $fmtPercent($var) }}</td>
+                                        <td class="text-center {{ $ratesClass($var) }}"
+                                            style="border-right: 1px solid #000;">{{ $fmtPercent($var) }}</td>
                                     @endfor
                                 </tr>
                             @endforeach
@@ -203,7 +221,9 @@
                                 <th style="width:100px">Code</th>
                                 <th class="libelle-col" style="min-width: 300px">Libellés</th>
                                 @foreach ($monthsLabels as $m)
-                                    <th colspan="3" style="background: rgba(243, 144, 83, 0.71); border-right: 1px solid #000; min-width: 130px">{{ $m }}</th>
+                                    <th colspan="3"
+                                        style="background: rgba(243, 144, 83, 0.71); border-right: 1px solid #000; min-width: 130px">
+                                        {{ $m }}</th>
                                 @endforeach
                             </tr>
                         </thead>

@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Connexion DS423</title>
+    <title>Connexion SUIVI-BUDGET</title>
     @include('partials.style')
     <style>
         body,
         html {
             height: 100%;
             margin: 0;
-            background: #f15d1d !important;
+            background: #003d82 !important;
             /* background-image: url('{{ asset('images/premium.jpg') }}'); */
             /* Mets ici ton image */
             background-size: cover;
@@ -42,7 +42,7 @@
             position: absolute;
             right: -25px;
             bottom: 20px;
-            background-color: #020a12;
+            background-color: #41825a;
             border: none;
             border-radius: 50%;
             width: 65px;
@@ -56,8 +56,8 @@
         }
 
         .login-button:hover {
-            background-color: #f15d1d;
-            border: 2px solid #020a12;
+            background-color: #3a533e;
+            border: 2px solid #3a533e;
         }
 
         @media (max-width: 768px) {
@@ -82,9 +82,9 @@
     <div class="login-container">
         <form class="login-card" action="{{ route('login_admin') }}" method="POST">
             @csrf
-            <h5 class="text-dark fw-bold mb-3">AUXFIN BURKINA -- CONNEXION</h5>
+            <h5 class="text-dark text-center fw-bold mb-3">SUIVI BUDGET - CONNEXION</h5>
             <div class="mb-4 text-center">
-                <img src="{{ asset('images/auxfin.png') }}" alt="logo auxfin" style="width: 50%; margin-left: auto; margin-right: auto;">
+                <img src="{{ asset('images/images.jpg') }}" alt="logo suivi budget" style="width: 50%; margin-left: auto; margin-right: auto;">
             </div>
             <p class="fw-semibold mb-3 text-bolde">Entrez vos identifiants...</p>
 

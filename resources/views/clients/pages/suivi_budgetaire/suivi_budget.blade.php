@@ -16,6 +16,19 @@
             </form>
         </div>
 
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="mb-0 text-danger"></h3>
+            <div>
+                <a href="" class="btn btn-success">
+                    <i class="fas fa-file-excel"></i>&nbsp;&nbsp;Exporter vers Excel
+                </a>
+                <a href="{{ route('budget.print', ['year' => $year]) }}" target="_blank"
+                    class="btn btn-success">
+                    <i class="fas fa-print"></i>&nbsp;&nbsp;Imprimer
+                </a>
+            </div>
+        </div>
+
         <div class="row">
             {{-- ENCAISSEMENTS --}}
             <div class="col-12 mb-5">
@@ -35,7 +48,8 @@
                                             @foreach ($months as $m)
                                                 <th class="text-end" style="width:110px">{{ $m }}</th>
                                             @endforeach
-                                            <th class="text-center" style="width:150px; background: rgb(241, 180, 110)">Total</th>
+                                            <th class="text-center" style="width:150px; background: rgb(241, 180, 110)">
+                                                Total</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -49,7 +63,8 @@
                                                             {{ $amt ? number_format($amt, 0, ',', ' ') : '' }}
                                                         </td>
                                                     @endforeach
-                                                    <td class="text-center" style="width:150px; background: rgb(241, 180, 110)">
+                                                    <td class="text-center"
+                                                        style="width:150px; background: rgb(241, 180, 110)">
                                                         <strong>{{ $row['total'] ? number_format($row['total'], 0, ',', ' ') : '' }}</strong>
                                                     </td>
                                                 </tr>
@@ -81,7 +96,8 @@
                                             @foreach ($months as $m)
                                                 <th class="text-end" style="width:110px">{{ $m }}</th>
                                             @endforeach
-                                            <th class="text-center" style="width:150px; background: rgb(241, 180, 110)">Total</th>
+                                            <th class="text-center" style="width:150px; background: rgb(241, 180, 110)">
+                                                Total</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -95,7 +111,8 @@
                                                             {{ $amt ? number_format($amt, 0, ',', ' ') : '' }}
                                                         </td>
                                                     @endforeach
-                                                    <td class="text-center" style="width:150px; background: rgb(241, 180, 110)">
+                                                    <td class="text-center"
+                                                        style="width:150px; background: rgb(241, 180, 110)">
                                                         <strong>{{ $row['total'] ? number_format($row['total'], 0, ',', ' ') : '' }}</strong>
                                                     </td>
                                                 </tr>
