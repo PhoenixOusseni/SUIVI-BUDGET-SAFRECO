@@ -28,8 +28,7 @@
                                 d’exécution du
                                 budgétaire</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('budget.consommation') }}">Suivi du taux
-                                de consommation des
-                                subventions</a></li>
+                                de consommation des subventions</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -38,8 +37,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li class="nav-item"><a class="nav-link" href="{{ route('tresorerie.depenses_rations') }}">Suivi
-                                des dépenses en termes de
-                                rations</a></li>
+                                des dépenses en termes de rations</a></li>
                         <li class="nav-item"><a class="nav-link"
                                 href="{{ route('tresorerie.situation_financiere') }}">Suivi de la situation
                                 financière</a></li>
@@ -53,9 +51,12 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li class="nav-item"><a class="nav-link" href="{{ route('gestion_taches.index') }}">Saisi des taches</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('engagement.gestion_fournisseurs') }}">Saisi fournisseurs</a></li>
+
                         <li class="nav-item"><a class="nav-link"
                                 href="{{ route('engagement.suivi_fournisseurs') }}">Suivi des fournisseurs</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('engagement.suivi_audits') }}">Suivi des
+                        <li class="nav-item"><a class="nav-link" href="{{ route('engagement.suivi_audits') }}">Suivi
+                                des
                                 audits traitées</a></li>
                     </ul>
                 </li>

@@ -45,6 +45,10 @@ Route::middleware(['auth'])->group(function () {
     // Route for engagement Monitoring
     Route::get('/suivi-engagement/suivi_engagements', [EngagementController::class, 'suivi_fournisseurs'])->name('engagement.suivi_fournisseurs');
     Route::get('/suivi-engagement/suivi_audits', [EngagementController::class, 'suivi_audits'])->name('engagement.suivi_audits');
+    Route::get('/suivi-engagement/gestion_fournisseurs', [EngagementController::class, 'gestion_fournisseurs'])->name('engagement.gestion_fournisseurs');
+    Route::post('/suivi-engagement/store_fournisseurs', [EngagementController::class, 'store_fournisseurs'])->name('engagement.fournisseurs.store');
+    Route::get('/suivi-engagement/gestion_engagements', [EngagementController::class, 'gestion_engagements'])->name('engagement.gestion_engagements');
+    Route::post('/suivi-engagement/store_engagements', [EngagementController::class, 'store_engagements'])->name('engagement.gestion_engagements.store');
 
     // Configuration et données
     Route::get('/configurations', [PageController::class, 'config'])->name('config.page');

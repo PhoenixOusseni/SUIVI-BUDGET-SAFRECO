@@ -1,4 +1,5 @@
 @extends('clients.layouts.master')
+
 @section('content')
     <div class="container">
         <div class="container mt-3 text-center">

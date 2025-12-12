@@ -56,9 +56,6 @@
     <footer class="text-center">
         <p>Copyright © {{ date('Y') }} <span class="highlight">SAFRECO</span>. Tous droits réservés.</p>
         <p>Tel : +226 61 34 65 54 | Mail : infos@safreco.bf</p>
-        <a href="{{ route('logout') }}" class="admin-btn">
-            <i data-feather="log-out"></i> &nbsp;Déconnexion
-        </a>
     </footer>
 
     <!-- Bootstrap JS -->
