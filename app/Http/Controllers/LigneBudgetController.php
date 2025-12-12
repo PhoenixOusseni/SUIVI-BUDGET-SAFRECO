@@ -51,7 +51,7 @@ class LigneBudgetController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(LigneBudget $ligneBudget)
+    public function show(string $id)
     {
         //
     }
@@ -59,24 +59,44 @@ class LigneBudgetController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(LigneBudget $ligneBudget)
+    public function edit(string $id)
     {
-        //
+        $findLigneBudget = LigneBudget::findOrFail($id);
+        $codeBudgets = CodeBudget::all();
+        $ligneBudgets = LigneBudget::all();
+        return view('clients.pages.configs.ligne_budget.edit', compact('findLigneBudget', 'codeBudgets', 'ligneBudgets'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, LigneBudget $ligneBudget)
+    public function update(Request $request, String $id)
     {
-        //
+        $request->validate([
+            //'code' => 'required|unique:ligne_budgets,code,'.$id,
+            'intitule' => 'required',
+            'description' => 'nullable',
+            'code_budget_id' => 'required|exists:code_budgets,id',
+            'montant' => 'nullable|integer',
+        ]);
+        $ligneBudget = LigneBudget::findOrFail($id);
+        $ligneBudget->update([
+            //'code' => $request->code,
+            'intitule' => $request->intitule,
+            'description' => $request->description,
+            'code_budget_id' => $request->code_budget_id,
+            'montant' => $request->montant,
+        ]);
+        return redirect()->back()->with('success', 'Ligne budgetaire modifiée avec succès.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LigneBudget $ligneBudget)
+    public function destroy(String $id)
     {
-        //
+        $ligneBudget = LigneBudget::findOrFail($id);
+        $ligneBudget->delete();
+        return redirect()->back()->with('success', 'Ligne budgetaire supprimée avec succès.');
     }
 }

@@ -49,6 +49,13 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/suivi-engagement/store_fournisseurs', [EngagementController::class, 'store_fournisseurs'])->name('engagement.fournisseurs.store');
     Route::get('/suivi-engagement/gestion_engagements', [EngagementController::class, 'gestion_engagements'])->name('engagement.gestion_engagements');
     Route::post('/suivi-engagement/store_engagements', [EngagementController::class, 'store_engagements'])->name('engagement.gestion_engagements.store');
+    Route::get('/suivi-engagement/edit_fournisseur/{id}', [EngagementController::class, 'edit_fournisseur'])->name('engagement.edit_fournisseur');
+    Route::post('/suivi-engagement/update_fournisseur/{id}', [EngagementController::class, 'update_fournisseur'])->name('engagement.update_fournisseur');
+    Route::delete('/suivi-engagement/delete_fournisseur/{id}', [EngagementController::class, 'delete_fournisseur'])->name('engagement.delete_fournisseur');
+    Route::get('/suivi-engagement/edit_engagement/{id}', [EngagementController::class, 'edit_engagement'])->name('engagement.edit_engagement');
+    Route::post('/suivi-engagement/update_engagement/{id}', [EngagementController::class, 'update_engagement'])->name('engagement.update_engagement');
+    Route::delete('/suivi-engagement/delete_engagement/{id}', [EngagementController::class, 'delete_engagement'])->name('engagement.delete_engagement');
+
 
     // Configuration et données
     Route::get('/configurations', [PageController::class, 'config'])->name('config.page');

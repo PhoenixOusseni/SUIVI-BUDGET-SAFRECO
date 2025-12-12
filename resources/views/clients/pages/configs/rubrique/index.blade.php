@@ -37,7 +37,7 @@
                                             aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="{{ route('gestion_rubriques.store')}}" method="POST">
+                                        <form action="{{ route('gestion_rubriques.store') }}" method="POST">
                                             @csrf
                                             <div class="mb-3">
                                                 <label for="code" class="form-label">Code</label>
@@ -53,10 +53,13 @@
                                                 <label for="description" class="form-label">Description</label>
                                                 <textarea class="form-control" id="description" name="description" rows="3" placeholder="Entrez la description"></textarea>
                                             </div>
-                                            <div class="m-3">
-                                                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                            <div class="mb-3">
+                                                <button type="submit" class="btn btn-primary">
+                                                    <i data-feather="save"></i> &thinsp;&thinsp; Enregistrer
+                                                </button>
                                                 <button type="button" class="btn btn-danger"
-                                                    data-bs-dismiss="modal">Fermer</button>
+                                                    data-bs-dismiss="modal">
+                                                    <i data-feather="x-circle"></i> &thinsp;&thinsp; Fermer
                                             </div>
                                         </form>
                                     </div>
@@ -74,22 +77,26 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($rubriques as $rubrique)
-                                <tr>
-                                    <td>{{ $rubrique->code }}</td>
-                                    <td>{{ $rubrique->intitule }}</td>
-                                    <td>{{ $rubrique->description }}</td>
-                                    <td>
-                                        <a href="{{ route('gestion_rubriques.edit', $rubrique->id) }}" class="btn btn-sm btn-warning">
-                                            <i data-feather="edit"></i>&thinsp;&thinsp; Modifier
-                                        </a>
-                                        <form action="{{ route('gestion_rubriques.destroy', $rubrique->id) }}" method="POST" style="display:inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette rubrique ?')"><i data-feather="trash-2"></i>&thinsp;&thinsp; Supprimer</button>
-                                        </form>
-                                    </td>
-                                </tr>
+                                @foreach ($rubriques as $rubrique)
+                                    <tr>
+                                        <td>{{ $rubrique->code }}</td>
+                                        <td>{{ $rubrique->intitule }}</td>
+                                        <td>{{ $rubrique->description }}</td>
+                                        <td>
+                                            <a href="{{ route('gestion_rubriques.edit', $rubrique->id) }}"
+                                                class="btn btn-sm btn-warning">
+                                                <i data-feather="edit"></i>&thinsp;&thinsp; Modifier
+                                            </a>
+                                            <form action="{{ route('gestion_rubriques.destroy', $rubrique->id) }}"
+                                                method="POST" style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger"
+                                                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette rubrique ?')"><i
+                                                        data-feather="trash-2"></i>&thinsp;&thinsp; Supprimer</button>
+                                            </form>
+                                        </td>
+                                    </tr>
                                 @endforeach
                                 {{-- More rows can be added here --}}
                             </tbody>

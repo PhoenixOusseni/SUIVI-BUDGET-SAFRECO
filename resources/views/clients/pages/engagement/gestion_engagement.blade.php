@@ -20,7 +20,7 @@
                                 <i class="fas fa-plus"></i>&nbsp; Ajouter un engagement
                             </button>
                         </div>
-                        <table class="table table-striped" id="datatablesSimple">
+                        <table class="table table-striped" id="datatablesSimple" style="min-width: 1500px;">
                             <thead>
                                 <tr>
                                     <th>Code</th>
@@ -32,6 +32,7 @@
                                     <th>+45J</th>
                                     <th>Fournisseur</th>
                                     <th>Pièce jointe</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -53,6 +54,18 @@
                                             @else
                                                 <span class="text-muted">Aucun</span>
                                             @endif
+                                        </td>
+                                        <td class="d-flex gap-2">
+                                            <a href="{{ route('engagement.edit_engagement', $engagement->id) }}" class="btn btn-sm btn-warning">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <form method="POST" action="{{ route('engagement.delete_engagement', $engagement->id) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet engagement ?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </form>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -128,7 +141,7 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="code" class="small">Code</label>
-                                <input type="text" class="form-control" id="code" placeholder="Code auto-g�n�r�" disabled>
+                                <input type="text" class="form-control" id="code" placeholder="Code auto-généré" disabled>
                             </div>
                             <div class="col-md-6">
                                 <label for="date_depot" class="small">Date de dépôt <span class="text-danger">*</span></label>
@@ -155,15 +168,15 @@
                         <div class="row mb-3">
                             <div class="col-md-4">
                                 <label for="j_1" class="small">30J</label>
-                                <input type="text" class="form-control" id="j_1" name="j_1" placeholder="30J">
+                                <input type="text" class="form-control" id="j_1" name="j_1" placeholder="30J" disabled>
                             </div>
                             <div class="col-md-4">
                                 <label for="j_2" class="small">45J</label>
-                                <input type="text" class="form-control" id="j_2" name="j_2" placeholder="45J">
+                                <input type="text" class="form-control" id="j_2" name="j_2" placeholder="45J" disabled>
                             </div>
                             <div class="col-md-4">
                                 <label for="j_3" class="small">+45J</label>
-                                <input type="text" class="form-control" id="j_3" name="j_3" placeholder="+45J">
+                                <input type="text" class="form-control" id="j_3" name="j_3" placeholder="+45J" disabled>
                             </div>
                         </div>
 

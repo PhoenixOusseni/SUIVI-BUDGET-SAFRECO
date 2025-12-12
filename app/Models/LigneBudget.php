@@ -28,7 +28,7 @@ class LigneBudget extends Model
     {
         return $this->hasMany(Realisation::class, 'ligne_budget_id');
     }
-    
+
     public function operations()
     {
         return $this->hasMany(Operation::class, 'ligne_budget_id');

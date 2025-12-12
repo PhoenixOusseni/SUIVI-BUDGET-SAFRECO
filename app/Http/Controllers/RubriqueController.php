@@ -47,7 +47,7 @@ class RubriqueController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Rubrique $rubrique)
+    public function show(String $id)
     {
         //
     }
@@ -55,17 +55,30 @@ class RubriqueController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Rubrique $rubrique)
+    public function edit(String $id)
     {
-        //
+        $findRubrique = Rubrique::findOrFail($id);
+        $rubriques = Rubrique::all();
+        return view ('clients.pages.configs.rubrique.edit', compact('findRubrique', 'rubriques'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Rubrique $rubrique)
+    public function update(Request $request, String $id)
     {
-        //
+        $request->validate([
+            'intitule' => 'required',
+            'description' => 'nullable',
+        ]);
+
+        $rubrique = Rubrique::findOrFail($id);
+        $rubrique->update([
+            'intitule' => $request->intitule,
+            'description' => $request->description,
+        ]);
+
+        return redirect()->back()->with('success', 'Rubrique mise à jour avec succès.');
     }
 
     /**

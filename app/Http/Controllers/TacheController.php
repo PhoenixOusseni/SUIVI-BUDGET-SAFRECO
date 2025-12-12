@@ -67,24 +67,53 @@ class TacheController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Tache $tache)
+    public function edit(String $id)
     {
-        //
+        $tacheFind = Tache::findOrFail($id);
+        $taches = Tache::all();
+        return view('clients.pages.tache.edit', compact('tacheFind', 'taches'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Tache $tache)
+    public function update(Request $request, String $id)
     {
-        //
+        $tache = Tache::findOrFail($id);
+
+        $request->validate([
+            'libelle' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'date_debut' => 'nullable|date',
+            'date_echeance' => 'nullable|date',
+            'taux' => 'nullable|numeric|min:0|max:100',
+            'file' => 'nullable|file|mimes:pdf,doc,docx,jpg,png',
+        ]);
+
+        $tache->libelle = $request->libelle;
+        $tache->description = $request->description;
+        $tache->date_debut = $request->date_debut;
+        $tache->date_echeance = $request->date_echeance;
+        $tache->taux = $request->taux;
+
+        if ($request->hasFile('file')) {
+            $filePath = $request->file('file')->store('taches_files', 'public');
+            $tache->file = $filePath;
+        }
+
+        $tache->save();
+
+        return redirect()->back()->with('success', 'Tâche mise à jour avec succès.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Tache $tache)
+    public function destroy(String $id)
     {
-        //
+        $tache = Tache::findOrFail($id);
+        $tache->delete();
+
+        return redirect()->back()->with('success', 'Tâche supprimée avec succès.');
     }
 }

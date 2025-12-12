@@ -61,24 +61,44 @@ class CodeBudgetController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(CodeBudget $codeBudget)
+    public function edit(String $id)
     {
-        //
+        $findCodeBudget = CodeBudget::findOrFail($id);
+        $rubriques = Rubrique::all();
+        $codeBudgets = CodeBudget::all();
+        return view ('clients.pages.configs.code_budget.edit', compact('findCodeBudget', 'rubriques', 'codeBudgets'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, CodeBudget $codeBudget)
+    public function update(Request $request, String $id)
     {
-        //
+        $request->validate([
+            'intitule' => 'required',
+            'description' => 'nullable',
+            'rubrique_id' => 'required|exists:rubriques,id',
+            'montant' => 'nullable|numeric',
+        ]);
+
+        $codeBudget = CodeBudget::findOrFail($id);
+        $codeBudget->update([
+            'intitule' => $request->intitule,
+            'description' => $request->description,
+            'rubrique_id' => $request->rubrique_id,
+            'montant' => $request->montant,
+        ]);
+
+        return redirect()->back()->with('success', 'Code budgetaire mis à jour avec succès.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(CodeBudget $codeBudget)
+    public function destroy(String $id)
     {
-        //
+        $codeBudget = CodeBudget::findOrFail($id);
+        $codeBudget->delete();
+        return redirect()->back()->with('success', 'Code budgetaire supprimé avec succès.');
     }
 }

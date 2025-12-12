@@ -11,10 +11,7 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="alert alert-info" role="alert">
-                            <h4 class="alert-heading">Bienvenue dans la section de gestion des codes budgetaires!</h4>
-                            <p>Dans cette section, vous pouvez ajouter, modifier ou supprimer des codes budgetaires pour
-                                organiser
-                                vos données budgétaires de manière efficace</p>
+                            <h4 class="alert-heading">Modification de code budgetaire "{{ $findCodeBudget->code }}"</h4>
                             <hr>
                         </div>
                     </div>
@@ -59,39 +56,39 @@
                     </div>
                     <div class="col-md-4">
                         <h5 class="mb-3">Ajout de Code Budgetaire</h5>
-                        <form action="{{ route('gestion_code_budgets.store') }}" method="POST">
+                        <form action="{{ route('gestion_code_budgets.update', $findCodeBudget->id) }}" method="POST">
                             @csrf
+                            @method('PUT')
                             <div class="mb-3">
                                 <label for="code" class="small">Code</label>
-                                <input type="text" class="form-control" id="code"
-                                    placeholder="Le code se genère automatiquement" disabled>
+                                <input type="text" class="form-control" id="code" value="{{ $findCodeBudget->code }}" disabled>
                             </div>
                             <div class="mb-3">
                                 <label for="nom" class="small">Rubrique</label>
                                 <select class="form-select" id="rubrique_id" name="rubrique_id">
-                                    <option value="" selected disabled>-- Sélectionnez une rubrique --</option>
+                                    <option value="">Sélectionnez une rubrique</option>
                                     @foreach ($rubriques as $rubrique)
-                                        <option value="{{ $rubrique->id }}">{{ $rubrique->code }} - {{ $rubrique->intitule }}</option>
+                                        <option value="{{ $rubrique->id }}"
+                                            {{ $findCodeBudget->rubrique_id == $rubrique->id ? 'selected' : '' }}>
+                                            {{ $rubrique->intitule }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="mb-3">
                                 <label for="intitule" class="small">Intitule</label>
-                                <input type="text" class="form-control" id="intitule" name="intitule"
-                                    placeholder="Entrez l'intitule">
+                                <input type="text" class="form-control" id="intitule" name="intitule" value="{{ $findCodeBudget->intitule }}">
                             </div>
                             <div class="mb-3">
                                 <label for="montant" class="small">Montant</label>
-                                <input type="number" class="form-control" id="montant" name="montant"
-                                    placeholder="Entrez le montant">
+                                <input type="number" class="form-control" id="montant" name="montant" value="{{ $findCodeBudget->montant }}">
                             </div>
                             <div class="mb-3">
                                 <label for="description" class="small">Description</label>
-                                <textarea class="form-control" id="description" name="description" rows="3" placeholder="Entrez la description"></textarea>
+                                <textarea class="form-control" id="description" name="description" rows="3" placeholder="Entrez la description">{{ $findCodeBudget->description }}</textarea>
                             </div>
                             <div class="mb-3">
                                 <button type="submit" class="btn btn-primary">
-                                    <i data-feather="save"></i> &thinsp;&thinsp; Enregistrer
+                                    <i data-feather="edit"></i> &thinsp;&thinsp; Modifier
                                 </button>
                                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
                                     <i data-feather="x-circle"></i> &thinsp;&thinsp; Fermer

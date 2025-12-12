@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('operations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('ligne_budget_id')->nullable()->constrained('ligne_budgets')->onDelete('set null');
+            $table->foreignId('ligne_budget_id')->nullable()->constrained('ligne_budgets')->onDelete('cascade')-> onUpdate('cascade');
             $table->unsignedSmallInteger('year'); // ex: 2025
             $table->date('date')->nullable();
             $table->string('libelle')->nullable();

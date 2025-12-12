@@ -13,31 +13,32 @@
             <div class="col-md-6 mb-4">
                 <div class="card h-100">
                     <div class="card-body">
-                        <h5 class="card-title text-success">Formulaire de saisi des Tâches</h5>
-                        <form method="POST" action="{{ route('gestion_taches.store') }}" enctype="multipart/form-data">
+                        <h5 class="card-title text-success">Modification de la Tâche {{ $tacheFind->code }}</h5>
+                        <form method="POST" action="{{ route('gestion_taches.update', $tacheFind->id) }}" enctype="multipart/form-data">
                             @csrf
+                            @method('PUT')
                             <div class="mb-3">
                                 <label for="code" class="small">Code</label>
-                                <input type="text" class="form-control" id="code" placeholder="Code de la tâche" disabled>
+                                <input type="text" class="form-control" id="code" value="{{ $tacheFind->code }}" disabled>
                             </div>
                             <div class="mb-3">
                                 <label for="libelle" class="small">Libellé <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="libelle" name="libelle" required>
+                                <input type="text" class="form-control" id="libelle" name="libelle" value="{{ $tacheFind->libelle }}" required>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <label for="date_debut" class="small">Date de Début</label>
-                                    <input type="date" class="form-control" id="date_debut" name="date_debut">
+                                    <input type="date" class="form-control" id="date_debut" name="date_debut" value="{{ $tacheFind->date_debut }}">
                                 </div>
                                 <div class="col-md-6">
                                     <label for="date_echeance" class="small">Date d'Échéance</label>
-                                    <input type="date" class="form-control" id="date_echeance" name="date_echeance">
+                                    <input type="date" class="form-control" id="date_echeance" name="date_echeance" value="{{ $tacheFind->date_echeance }}">
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <label for="taux" class="small">Taux (%)</label>
-                                    <input type="number" class="form-control" id="taux" name="taux" min="0" max="100" placeholder="Taux d'avancement">
+                                    <input type="number" class="form-control" id="taux" name="taux" min="0" max="100" value="{{ $tacheFind->taux }}">
                                 </div>
                                 <div class="col-md-6">
                                     <label for="file" class="small">Fichier</label>
@@ -46,11 +47,11 @@
                             </div>
                             <div class="mb-3">
                                 <label for="description" class="small">Description</label>
-                                <textarea class="form-control" id="description" name="description" rows="3" placeholder="Description détaillée de la tâche"></textarea>
+                                <textarea class="form-control" id="description" name="description" rows="3">{{ $tacheFind->description }}</textarea>
                             </div>
                             <div>
                                 <button type="submit" class="btn btn-success">
-                                    <i class="fas fa-save"></i>&nbsp; Enregistrer la Tâche
+                                    <i class="fas fa-edit"></i>&nbsp; Modifier la Tâche
                                 </button>
                             </div>
                         </form>
@@ -90,7 +91,6 @@
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </form>
-                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>

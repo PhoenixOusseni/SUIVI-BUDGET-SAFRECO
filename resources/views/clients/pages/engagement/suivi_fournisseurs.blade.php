@@ -71,7 +71,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title" id="addEngagementModalLabel">
+                    <h5 class="modal-title text-light" id="addEngagementModalLabel">
                         <i class="fas fa-plus-circle"></i>&nbsp; Ajouter un engagement
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
@@ -84,7 +84,7 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="code" class="small">Code</label>
-                                <input type="text" class="form-control" id="code" placeholder="Code auto-g�n�r�"
+                                <input type="text" class="form-control" id="code" placeholder="Code auto-généré"
                                     disabled>
                             </div>
                             <div class="col-md-6">
@@ -115,15 +115,15 @@
                         <div class="row mb-3">
                             <div class="col-md-4">
                                 <label for="j_1" class="small">30J</label>
-                                <input type="text" class="form-control" id="j_1" name="j_1" placeholder="30J">
+                                <input type="text" class="form-control" id="j_1" name="j_1" placeholder="30J" disabled>
                             </div>
                             <div class="col-md-4">
                                 <label for="j_2" class="small">45J</label>
-                                <input type="text" class="form-control" id="j_2" name="j_2" placeholder="45J">
+                                <input type="text" class="form-control" id="j_2" name="j_2" placeholder="45J" disabled>
                             </div>
                             <div class="col-md-4">
                                 <label for="j_3" class="small">+45J</label>
-                                <input type="text" class="form-control" id="j_3" name="j_3" placeholder="+45J">
+                                <input type="text" class="form-control" id="j_3" name="j_3" placeholder="+45J" disabled>
                             </div>
                         </div>
 
