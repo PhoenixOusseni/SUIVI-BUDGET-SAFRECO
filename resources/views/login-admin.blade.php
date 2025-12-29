@@ -89,11 +89,17 @@
             <p class="fw-semibold mb-3 text-bolde">Entrez vos identifiants...</p>
 
             <div class="mb-4">
-                <input type="email" name="email" class="form-control" placeholder="Nom d'utilisateur" required>
+                <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" placeholder="Nom d'utilisateur" value="{{ old('email') }}" required>
+                @error('email')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-5">
-                <input type="password" name="password" class="form-control" placeholder="Mot de passe" required>
+                <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Mot de passe" required>
+                @error('password')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
 
             <button type="submit" class="login-button">

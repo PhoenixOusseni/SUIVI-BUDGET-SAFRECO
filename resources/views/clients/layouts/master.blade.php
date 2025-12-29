@@ -48,6 +48,35 @@
     <!-- Contenu principal -->
     <div class="container" style="min-height: 100vh; height: auto;">
 
+        @if (session('success') || session('error'))
+            <div class="position-fixed top-0 end-0 p-3" style="z-index: 9999">
+                <div class="toast align-items-center text-white {{ session('success') ? 'bg-success' : 'bg-danger' }} border-0"
+                    role="alert" aria-live="assertive" aria-atomic="true" id="statusToast" data-bs-delay="5000">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            @if (session('success'))
+                                <div class="text-center">
+                                    <h5 class="mb-2 text-white">Succès !</h5>
+                                    <p class="mt-3 text-white">
+                                        <i class="bi bi-check-circle"></i> {{ session('success') }}
+                                    </p>
+                                </div>
+                            @else
+                                <div class="text-center">
+                                    <h5 class="mb-2 text-white">Erreur !</h5>
+                                    <p class="mt-3 text-white">
+                                        <i class="bi bi-exclamation-triangle"></i> {{ session('error') }}
+                                    </p>
+                                </div>
+                            @endif
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
+        @endif
+
+        {{-- Yield the main content --}}
         @yield('content')
 
     </div>
@@ -61,6 +90,17 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     @include('partials.script')
+
+    <!-- Initialiser les toasts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var toastEl = document.getElementById('statusToast');
+            if (toastEl) {
+                var toast = new bootstrap.Toast(toastEl);
+                toast.show();
+            }
+        });
+    </script>
 </body>
 
 </html>

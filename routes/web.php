@@ -71,6 +71,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('gestion_previsions', PrevisionController::class);
     // import form POST
     Route::post('/previsions/import', [PrevisionController::class, 'import'])->name('previsions.import');
+    // export form GET
+    Route::get('/previsions/export', [PrevisionController::class, 'export'])->name('previsions.export');
     // print previsions
     Route::get('/previsions/print', [PrevisionController::class, 'print'])->name('previsions.print');
 
@@ -79,6 +81,10 @@ Route::middleware(['auth'])->group(function () {
     // print realisations
     Route::get('/realisations/print', [RealisationController::class, 'print'])->name('realisations.print');
     Route::resource('gestion_realisations', RealisationController::class);
+    // import form POST
+    Route::post('/realisations/import', [RealisationController::class, 'import'])->name('realisations.import');
+    // export form GET
+    Route::get('/realisations/export', [RealisationController::class, 'export'])->name('realisations.export');
 
     // Routes for Operations data entry
     Route::resource('gestion_operations', OperationController::class);

@@ -1,34 +1,13 @@
 @extends('clients.layouts.master')
 
 @section('content')
-    <div class="container">
+    <div class="container mb-5">
         <h4 class="page-title">SAISI DES REALISATIONS</h4>
         <div class="card">
             <div class="card-body">
                 {{-- Include the menu configuration partial --}}
                 @include('clients.pages.data.menu_data')
 
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="alert alert-secondary" role="alert">
-                            <h4 class="small">Veuillez importer votre fichier de réalisations, veuillez sélectionner un
-                                fichier ci-dessous (.xlsx, .xls)</h4>
-                            <div class="row">
-                                <form action="" method="POST" enctype="multipart/form-data" class="d-flex">
-                                    <div class="col-md-4">
-                                        <input type="file" name="realisation_file" id="realisation_file" class="form-control"
-                                            accept=".xlsx,.xls" required>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <button class="btn btn-warning" type="submit">
-                                            <i class="fas fa-upload"></i>&nbsp;&nbsp; Importer
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="row">
                     <div class="col-sm-12">
                         {{-- Additional content can be added here --}}

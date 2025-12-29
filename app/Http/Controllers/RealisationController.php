@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Realisation;
 use App\Models\RealisationMonth;
 use App\Models\LigneBudget;
+use App\Imports\RealisationsImport;
+use App\Exports\RealisationsExport;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use Throwable;
 
 use Illuminate\Http\Request;
@@ -266,5 +269,51 @@ class RealisationController extends Controller
             'year' => $year,
             'monthsLabels' => $monthsLabels,
         ]);
+    }
+
+    /**
+     * Importer des réalisations depuis un fichier Excel/CSV.
+     */
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv|max:10240',
+        ]);
+
+        try {
+            $import = new RealisationsImport();
+            Excel::import($import, $request->file('file'));
+
+            $results = $import->getResults();
+
+            $message = "Import terminé. ";
+            $message .= "Succès: {$results['success']}, ";
+            $message .= "Erreurs: {$results['errors']}, ";
+            $message .= "Ignorées: {$results['skipped']}";
+
+            if (!empty($results['messages'])) {
+                $message .= "\n\nDétails:\n" . implode("\n", $results['messages']);
+            }
+
+            return redirect()
+                ->back()
+                ->with('success', $message);
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->withErrors(['error' => 'Erreur lors de l\'import : ' . $e->getMessage()]);
+        }
+    }
+
+    /**
+     * Exporter des réalisations vers un fichier Excel/CSV.
+     */
+    public function export(Request $request)
+    {
+        $year = (int) $request->input('year', date('Y'));
+        $ligneBudgetId = $request->input('ligne_budget_id');
+        $export = new RealisationsExport($year, $ligneBudgetId);
+        $fileName = "realisations_{$year}.xlsx";
+        return Excel::download($export, $fileName);
     }
 }

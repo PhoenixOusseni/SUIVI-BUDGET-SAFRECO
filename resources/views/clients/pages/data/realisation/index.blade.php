@@ -47,8 +47,16 @@
                     </div>
                     <div class="d-flex gap-2">
                         <div class="">
+                            {{-- Import Button --}}
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#importModal">
+                                <i class="fas fa-file-import"></i>&nbsp;&nbsp; Importer
+                            </button>
+                        </div>
+                        <div class="">
                             {{-- Export Button --}}
-                            <a href="#" class="btn btn-success">
+                            <a href="{{ route('realisations.export', ['year' => request('year', date('Y')), 'ligne_budget_id' => request('ligne_budget_id')]) }}"
+                                class="btn btn-success">
                                 <i class="fas fa-file-export"></i>&nbsp;&nbsp; Exporter
                             </a>
                         </div>
@@ -151,4 +159,63 @@
             </div>
         </div>
     </div>
+
+
+    {{-- Import Modal --}}
+    <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="importModalLabel">Importer des réalisations</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('realisations.import') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="file" class="form-label">Sélectionner un fichier Excel</label>
+                            <input type="file" class="form-control @error('file') is-invalid @enderror" id="file"
+                                name="file" accept=".xlsx,.xls,.csv" required>
+                            @error('file')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="alert alert-info">
+                            <strong>Format attendu :</strong>
+                            <ul class="mb-0">
+                                <li>Colonnes requises : <code>code</code>, <code>annee</code></li>
+                                <li>Mois : <code>janvier</code>, <code>fevrier</code>, <code>mars</code>, etc.</li>
+                                <li>Le code doit correspondre à une ligne budgétaire existante</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-upload"></i> Importer
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    @if (session('import_messages'))
+        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+            <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <strong class="me-auto">Détails de l'import</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    <ul class="mb-0">
+                        @foreach (session('import_messages') as $message)
+                            <li>{{ $message }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
+    @endif
 @endsection

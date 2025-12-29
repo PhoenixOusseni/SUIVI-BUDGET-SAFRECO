@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Prevision;
 use App\Models\PrevisionMonth;
 use App\Models\LigneBudget;
+use App\Exports\PrevisionsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PrevisionController extends Controller
 {
@@ -171,211 +173,77 @@ class PrevisionController extends Controller
         }
     }
 
+
     /**
      * Importer des prévisions depuis un fichier Excel/CSV.
      */
     public function import(Request $request)
     {
-        // validation minimale
+        // Validation du fichier
         $request->validate([
-            'import_file' => ['required', 'file', 'mimes:xlsx,xls,csv'],
-            'year' => ['required', 'integer'],
+            'file' => 'required|file|mimes:xlsx,xls,csv|max:10240', // max 10MB
+        ], [
+            'file.required' => 'Veuillez sélectionner un fichier à importer.',
+            'file.mimes' => 'Le fichier doit être au format Excel (xlsx, xls) ou CSV.',
+            'file.max' => 'Le fichier ne doit pas dépasser 10 Mo.',
         ]);
 
-        $year = (int) $request->input('year');
-
-        $file = $request->file('import_file');
-
-        $import = new PrevisionsImport();
-
         try {
-            // Lire le fichier (stocke les rows dans l'import)
-            Excel::import($import, $file);
-        } catch (Throwable $e) {
+            $file = $request->file('file');
+
+            // Import using PrevisionsImport class
+            $import = new \App\Imports\PrevisionsImport();
+            \Maatwebsite\Excel\Facades\Excel::import($import, $file);
+
+            // Get results
+            $results = $import->getResults();
+
+            // Prepare success message
+            $message = "Import terminé : {$results['success']} prévision(s) importée(s)";
+
+            if ($results['skipped'] > 0) {
+                $message .= ", {$results['skipped']} ligne(s) ignorée(s)";
+            }
+
+            if ($results['errors'] > 0) {
+                $message .= ", {$results['errors']} erreur(s)";
+            }
+
+            // Return with appropriate message type
+            if ($results['errors'] > 0) {
+                return redirect()
+                    ->route('gestion_previsions.index')
+                    ->with('warning', $message)
+                    ->with('import_messages', $results['messages']);
+            }
+
+            return redirect()
+                ->route('gestion_previsions.index')
+                ->with('success', $message)
+                ->with('import_messages', $results['messages']);
+
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+            $errors = [];
+
+            foreach ($failures as $failure) {
+                $errors[] = "Ligne {$failure->row()}: " . implode(', ', $failure->errors());
+            }
+
             return redirect()
                 ->back()
-                ->withInput()
-                ->withErrors(['import_file' => 'Impossible de lire le fichier : ' . $e->getMessage()]);
-        }
+                ->withErrors(['file' => 'Erreurs de validation dans le fichier'])
+                ->with('import_errors', $errors);
 
-        $rows = $import->getRows();
-        if (!$rows || $rows->isEmpty()) {
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Import error: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
+
             return redirect()
                 ->back()
-                ->withErrors(['import_file' => 'Fichier vide ou format non reconnu.']);
+                ->withErrors(['file' => 'Erreur lors de l\'import : ' . $e->getMessage()]);
         }
-
-        // Helpers pour la détection des colonnes et parsing des montants
-        $monthNamesMap = [
-            'janvier' => 1,
-            'fevrier' => 2,
-            'février' => 2,
-            'mars' => 3,
-            'avril' => 4,
-            'mai' => 5,
-            'juin' => 6,
-            'juillet' => 7,
-            'aout' => 8,
-            'août' => 8,
-            'septembre' => 9,
-            'octobre' => 10,
-            'novembre' => 11,
-            'decembre' => 12,
-            'décembre' => 12,
-            // english fallback
-            'january' => 1,
-            'february' => 2,
-            'march' => 3,
-            'april' => 4,
-            'may' => 5,
-            'june' => 6,
-            'july' => 7,
-            'august' => 8,
-            'september' => 9,
-            'october' => 10,
-            'november' => 11,
-            'december' => 12,
-        ];
-
-        $errors = [];
-        $successCount = 0;
-        $rowIndex = 1; // for reporting (first data row = 1)
-
-        // We'll iterate rows and process each prevision (one row = one ligne budgétaire)
-        foreach ($rows as $row) {
-            // $row is a Collection keyed by heading (WithHeadingRow => keys normalized to lower-case and spaces replaced)
-            $rowIndex++;
-
-            // find the header key that corresponds to "code" (loose matching)
-            $keys = $row->keys()->map(fn($k) => trim((string) $k))->all();
-
-            $codeKey = null;
-            foreach ($keys as $k) {
-                if (stripos($k, 'code') !== false) {
-                    $codeKey = $k;
-                    break;
-                }
-            }
-            if (!$codeKey) {
-                // try first column as fallback
-                $codeKey = $keys[0] ?? null;
-            }
-
-            $codeRaw = $codeKey ? trim((string) $row->get($codeKey)) : null;
-            if (!$codeRaw) {
-                $errors[] = "Ligne {$rowIndex} : code introuvable ou vide.";
-                continue;
-            }
-
-            // sanitize code (remove weird spaces)
-            $codeNorm = preg_replace('/\s+/', '', str_replace(['.', ','], '', $codeRaw));
-
-            // try to find the code budget:
-            $codeBudget = CodeBudget::whereRaw("REPLACE(REPLACE(REPLACE(code, ' ', ''),'.',''),',','') = ?", [$codeNorm])
-                ->orWhereRaw("REPLACE(REPLACE(REPLACE(code, ' ', ''),'.',''),',','') LIKE ?", ["%{$codeNorm}%"])
-                ->first();
-
-            if (!$codeBudget) {
-                // try by name (libellé) if code not found
-                $labelKey = null;
-                foreach ($keys as $k) {
-                    if (stripos($k, 'lib') !== false || stripos($k, 'intitule') !== false || stripos($k, 'label') !== false) {
-                        $labelKey = $k;
-                        break;
-                    }
-                }
-                $label = $labelKey ? trim((string) $row->get($labelKey)) : null;
-                if ($label) {
-                    $codeBudget = CodeBudget::where('name', 'like', '%' . mb_substr($label, 0, 50) . '%')->first();
-                }
-            }
-
-            if (!$codeBudget) {
-                $errors[] = "Ligne {$rowIndex} : ligne budgétaire introuvable pour code='{$codeRaw}'.";
-                continue;
-            }
-
-            // Build months array from row using matching headers
-            $monthsAmounts = [];
-            foreach ($keys as $k) {
-                $kNorm = mb_strtolower(trim($k));
-                // if key matches a month name
-                if (isset($monthNamesMap[$kNorm])) {
-                    $mNum = $monthNamesMap[$kNorm];
-                    $val = $row->get($k);
-                    $monthsAmounts[$mNum] = $this->parseAmount((string) $val);
-                }
-            }
-
-            // If no month columns detected, try some common variants: 'm1','m01', 'jan'
-            if (empty($monthsAmounts)) {
-                // attempt to detect keys like 'm1', 'mois1' or numeric headings
-                foreach ($keys as $k) {
-                    if (preg_match('/\b(mois|m|mois_)?0?([1-9]|1[0-2])\b/i', $k, $m)) {
-                        $mNum = (int) $m[2];
-                        $monthsAmounts[$mNum] = $this->parseAmount((string) $row->get($k));
-                    }
-                }
-            }
-
-            // if still empty, as fallback consider columns 3..14 as months (common layout)
-            if (empty($monthsAmounts)) {
-                $idx = 0;
-                foreach ($row as $val) {
-                    $idx++;
-                    if ($idx >= 3 && $idx <= 14) {
-                        // 12 months
-                        $mNum = $idx - 2;
-                        $monthsAmounts[$mNum] = $this->parseAmount((string) $val);
-                    }
-                }
-            }
-
-            // ensure we have keys 1..12 (fill missing with 0)
-            for ($m = 1; $m <= 12; $m++) {
-                if (!array_key_exists($m, $monthsAmounts)) {
-                    $monthsAmounts[$m] = 0.0;
-                }
-            }
-
-            // Transaction: create/update prevision + upsert months
-            try {
-                DB::transaction(function () use ($codeBudget, $year, $monthsAmounts, &$codeRaw) {
-                    // find or create prevision (unique key: ligne_budget_id + year)
-                    $prevision = Prevision::firstOrCreate(['ligne_budget_id' => $codeBudget->id, 'year' => $year], ['date' => null, 'notes' => null]);
-
-                    // prepare rows for upsert
-                    $rowsForUpsert = [];
-                    $now = now();
-                    foreach ($monthsAmounts as $m => $amount) {
-                        $rowsForUpsert[] = [
-                            'prevision_id' => $prevision->id,
-                            'month' => $m,
-                            'amount' => $amount,
-                            'created_at' => $now,
-                            'updated_at' => $now,
-                        ];
-                    }
-
-                    // use upsert to insert or update existing months in one query
-                    // unique keys: prevision_id + month
-                    PrevisionMonth::upsert($rowsForUpsert, ['prevision_id', 'month'], ['amount', 'updated_at']);
-                }, 3);
-                $successCount++;
-            } catch (Throwable $e) {
-                $errors[] = "Ligne {$rowIndex} (code {$codeRaw}) : erreur BD - " . $e->getMessage();
-                continue;
-            }
-        } // end foreach rows
-
-        // redirect back with summary
-        $msg = "Import terminé : {$successCount} lignes traitées.";
-        if (!empty($errors)) {
-            // add errors to session (could be a large array)
-            return redirect()->back()->with('success', $msg)->with('import_errors', $errors);
-        }
-
-        return redirect()->back()->with('success', $msg);
     }
 
     /**
@@ -418,30 +286,6 @@ class PrevisionController extends Controller
         }
 
         return (float) $s;
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Prevision $prevision)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Prevision $prevision)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Prevision $prevision)
-    {
-        //
     }
 
     /**
@@ -517,5 +361,17 @@ class PrevisionController extends Controller
             'year' => $year,
             'monthsLabels' => $monthsLabels,
         ]);
+    }
+
+    /**
+     * Exporter des prévisions vers un fichier Excel/CSV.
+     */
+    public function export(Request $request)
+    {
+        $year = (int) $request->input('year', date('Y'));
+        $ligneBudgetId = $request->input('ligne_budget_id');
+        $export = new PrevisionsExport($year, $ligneBudgetId);
+        $fileName = "previsions_{$year}.xlsx";
+        return Excel::download($export, $fileName);
     }
 }

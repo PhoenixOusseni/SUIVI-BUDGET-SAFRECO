@@ -2,8 +2,8 @@
 
 namespace App\Imports;
 
-use App\Models\Prevision;
-use App\Models\PrevisionMonth;
+use App\Models\Realisation;
+use App\Models\RealisationMonth;
 use App\Models\LigneBudget;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +15,7 @@ use Maatwebsite\Excel\Concerns\SkipsOnError;
 use Maatwebsite\Excel\Concerns\SkipsErrors;
 
 /**
- * Import class for Previsions from Excel/CSV.
+ * Import class for Realisations from Excel/CSV.
  * Expected columns (French format):
  * - code (Code budgétaire)
  * - annee (Année)
@@ -24,7 +24,7 @@ use Maatwebsite\Excel\Concerns\SkipsErrors;
  * Alternative English columns also supported:
  * - code, year, january, february, march, april, may, june, july, august, september, october, november, december
  */
-class PrevisionsImport implements ToCollection, WithHeadingRow, SkipsOnError
+class RealisationsImport implements ToCollection, WithHeadingRow, SkipsOnError
 {
     use SkipsErrors;
 
@@ -92,9 +92,9 @@ class PrevisionsImport implements ToCollection, WithHeadingRow, SkipsOnError
             12 => $this->parseAmount($this->getRowValue($row, ['decembre', 'december', 'dec', 'déc', 'décembre'])),
         ];
 
-        // Insert or update prevision
+        // Insert or update realisation
         DB::transaction(function () use ($ligneBudget, $year, $monthsData, $rowNumber) {
-            $prevision = Prevision::firstOrCreate(
+            $realisation = Realisation::firstOrCreate(
                 [
                     'ligne_budget_id' => $ligneBudget->id,
                     'year' => $year,
@@ -109,7 +109,7 @@ class PrevisionsImport implements ToCollection, WithHeadingRow, SkipsOnError
             $rows = [];
             foreach ($monthsData as $month => $amount) {
                 $rows[] = [
-                    'prevision_id' => $prevision->id,
+                    'realisation_id' => $realisation->id,
                     'month' => $month,
                     'amount' => $amount,
                     'created_at' => now(),
@@ -117,7 +117,7 @@ class PrevisionsImport implements ToCollection, WithHeadingRow, SkipsOnError
                 ];
             }
 
-            PrevisionMonth::upsert($rows, ['prevision_id', 'month'], ['amount', 'updated_at']);
+            RealisationMonth::upsert($rows, ['realisation_id', 'month'], ['amount', 'updated_at']);
 
             $this->results['success']++;
         });
