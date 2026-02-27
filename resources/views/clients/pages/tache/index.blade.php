@@ -18,7 +18,8 @@
                             @csrf
                             <div class="mb-3">
                                 <label for="code" class="small">Code</label>
-                                <input type="text" class="form-control" id="code" placeholder="Code de la tâche" disabled>
+                                <input type="text" class="form-control" id="code" placeholder="Code de la tâche"
+                                    name="code">
                             </div>
                             <div class="mb-3">
                                 <label for="libelle" class="small">Libellé <span class="text-danger">*</span></label>
@@ -37,7 +38,8 @@
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <label for="taux" class="small">Taux (%)</label>
-                                    <input type="number" class="form-control" id="taux" name="taux" min="0" max="100" placeholder="Taux d'avancement">
+                                    <input type="number" class="form-control" id="taux" name="taux" min="0"
+                                        max="100" placeholder="Taux d'avancement">
                                 </div>
                                 <div class="col-md-6">
                                     <label for="file" class="small">Fichier</label>
@@ -46,7 +48,8 @@
                             </div>
                             <div class="mb-3">
                                 <label for="description" class="small">Description</label>
-                                <textarea class="form-control" id="description" name="description" rows="3" placeholder="Description détaillée de la tâche"></textarea>
+                                <textarea class="form-control" id="description" name="description" rows="3"
+                                    placeholder="Description détaillée de la tâche"></textarea>
                             </div>
                             <div>
                                 <button type="submit" class="btn btn-success">
@@ -62,39 +65,45 @@
                 <div class="card h-100">
                     <div class="card-body">
                         <h5 class="card-title text-success">Liste des Tâches</h5>
-                        <table class="table table-striped" id="datatablesSimple">
-                            <thead>
-                                <tr>
-                                    <th>Code</th>
-                                    <th>Date debut</th>
-                                    <th>Libellé</th>
-                                    <th>Taux (%)</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($taches as $tache)
+                        <div class="table-responsive">
+                            <table class="table table-striped" id="datatablesSimple">
+                                <thead>
                                     <tr>
-                                        <td>{{ $tache->code }}</td>
-                                        <td>{{ $tache->date_debut ? \Carbon\Carbon::parse($tache->date_debut)->format('d/m/Y') : '' }}</td>
-                                        <td>{{ $tache->libelle }}</td>
-                                        <td>{{ $tache->taux }}</td>
-                                        <td>
-                                            <a href="{{ route('gestion_taches.edit', $tache->id) }}" class="btn btn-warning btn-sm">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                            <form action="{{ route('gestion_taches.destroy', $tache->id) }}" method="POST" style="display: inline-block;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette tâche ?');">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
-                                            </form>
-                                        </td>
+                                        <th>Code</th>
+                                        <th>Date debut</th>
+                                        <th>Libellé</th>
+                                        <th>Taux (%)</th>
+                                        <th>Actions</th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach ($taches as $tache)
+                                        <tr>
+                                            <td>{{ $tache->code }}</td>
+                                            <td>{{ $tache->date_debut ? \Carbon\Carbon::parse($tache->date_debut)->format('d/m/Y') : '' }}
+                                            </td>
+                                            <td>{{ $tache->libelle }}</td>
+                                            <td>{{ $tache->taux }}</td>
+                                            <td>
+                                                <a href="{{ route('gestion_taches.edit', $tache->id) }}"
+                                                    class="btn btn-warning btn-sm">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <form action="{{ route('gestion_taches.destroy', $tache->id) }}"
+                                                    method="POST" style="display: inline-block;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger btn-sm"
+                                                        onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette tâche ?');">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

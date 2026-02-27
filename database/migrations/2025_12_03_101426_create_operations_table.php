@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,7 +12,11 @@ return new class extends Migration
     {
         Schema::create('operations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('ligne_budget_id')->nullable()->constrained('ligne_budgets')->onDelete('cascade')-> onUpdate('cascade');
+
+            $table->foreignId('ligne_budget_id')->nullable()->constrained('ligne_budgets')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('adherant_id')->nullable()->constrained('adherants')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('fournisseur_id')->nullable()->constrained('fournisseurs')->onDelete('cascade')->onUpdate('cascade');
+
             $table->unsignedSmallInteger('year'); // ex: 2025
             $table->date('date')->nullable();
             $table->string('libelle')->nullable();

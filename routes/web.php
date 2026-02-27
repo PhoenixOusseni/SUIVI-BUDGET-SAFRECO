@@ -13,6 +13,9 @@ use App\Http\Controllers\TresorerieController;
 use App\Http\Controllers\EngagementController;
 use App\Http\Controllers\OperationController;
 use App\Http\Controllers\TacheController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdherantController;
 
 
 // Routes publiques (sans authentification)
@@ -59,7 +62,8 @@ Route::middleware(['auth'])->group(function () {
 
     // Configuration et données
     Route::get('/configurations', [PageController::class, 'config'])->name('config.page');
-    Route::get('/donnees', [PageController::class, 'data'])->name('data.page');
+    Route::get('/donnees/prevision', [PageController::class, 'prevision'])->name('data.prevision');
+    Route::get('/donnees/realisation', [PageController::class, 'realisation'])->name('data.realisation');
 
     // Routes for Rubrique, CodeBudget, and LigneBudget management
     Route::resource('gestion_rubriques', RubriqueController::class);
@@ -92,4 +96,16 @@ Route::middleware(['auth'])->group(function () {
     // Routes for Taches management
     Route::resource('gestion_taches', TacheController::class);
 
+    // Routes for Collaborateurs management
+    Route::get('/collaborateurs', [PageController::class, 'collaborateurs'])->name('collaborateurs.index');
+
+    // Routes for User management
+    Route::resource('gestion_users', UserController::class);
+
+    // Routes for Adherants management
+    Route::resource('gestion_adherants', AdherantController::class);
+
+    // Profile
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 });

@@ -12,38 +12,32 @@
         </div>
 
         <div class="row mb-5">
-            <div class="col-md-6 mb-4">
+            <div class="col-md-4 mb-4">
                 <div class="card h-100">
                     <div class="card-body">
                         <h5 class="card-title text-success">Modifier le Fournisseur {{ $fournisseurFind->code }}</h5>
                         <form method="POST" action="{{ route('engagement.update_fournisseur', $fournisseurFind->id) }}"
                             enctype="multipart/form-data">
                             @csrf
-                            <div class="mb-3">
-                                <div class="row mb-3">
-                                    <div class="col-md-6">
-                                        <label for="code" class="small">Code</label>
-                                        <input type="text" class="form-control" id="code"
-                                            value="{{ $fournisseurFind->code }}" disabled>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="nom_fournisseur" class="small">Nom fournisseur</label>
-                                        <input type="text" class="form-control" id="nom_fournisseur"
-                                            name="nom_fournisseur" value="{{ $fournisseurFind->nom_fournisseur }}">
-                                    </div>
-                                </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="code" class="small">Code</label>
+                                <input type="text" class="form-control" id="code"
+                                    value="{{ $fournisseurFind->code }}" name="code">
                             </div>
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="contact_fournisseur" class="small">Contact fournisseur</label>
-                                    <input type="text" class="form-control" id="contact_fournisseur"
-                                        name="contact_fournisseur" value="{{ $fournisseurFind->contact_fournisseur }}">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="email_fournisseur" class="small">Email fournisseur</label>
-                                    <input type="email" class="form-control" id="email_fournisseur"
-                                        name="email_fournisseur" value="{{ $fournisseurFind->email_fournisseur }}">
-                                </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="nom_fournisseur" class="small">Nom fournisseur</label>
+                                <input type="text" class="form-control" id="nom_fournisseur" name="nom_fournisseur"
+                                    value="{{ $fournisseurFind->nom_fournisseur }}">
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="contact_fournisseur" class="small">Contact fournisseur</label>
+                                <input type="text" class="form-control" id="contact_fournisseur"
+                                    name="contact_fournisseur" value="{{ $fournisseurFind->contact_fournisseur }}">
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="email_fournisseur" class="small">Email fournisseur</label>
+                                <input type="email" class="form-control" id="email_fournisseur" name="email_fournisseur"
+                                    value="{{ $fournisseurFind->email_fournisseur }}">
                             </div>
                             <div>
                                 <button type="submit" class="btn btn-success">
@@ -55,7 +49,7 @@
                 </div>
             </div>
 
-            <div class="col-md-6 mb-4">
+            <div class="col-md-8 mb-4">
                 <div class="card h-100">
                     <div class="card-body">
                         <h5 class="card-title text-success">Liste des Fournisseurs</h5>

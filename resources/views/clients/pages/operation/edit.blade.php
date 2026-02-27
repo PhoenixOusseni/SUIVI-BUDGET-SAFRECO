@@ -75,6 +75,59 @@
                         <div class="row mb-3">
                             <div class="col-md-4">
                                 <div class="form-group">
+                                    <label class="small d-block">Tiers</label>
+                                    @php
+                                        $selectedTierType = old('tier_type');
+                                        if (!$selectedTierType) {
+                                            $selectedTierType = $operationFind->adherant_id ? 'adherant' : ($operationFind->fournisseur_id ? 'fournisseur' : null);
+                                        }
+                                    @endphp
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input tier-type-radio" type="radio" name="tier_type"
+                                            id="tierTypeAdherant" value="adherant"
+                                            {{ $selectedTierType === 'adherant' ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="tierTypeAdherant">Adherant</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input tier-type-radio" type="radio" name="tier_type"
+                                            id="tierTypeFournisseur" value="fournisseur"
+                                            {{ $selectedTierType === 'fournisseur' ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="tierTypeFournisseur">Fournisseur</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4" id="adherantSelectWrapper" style="display: none;">
+                                <div class="form-group">
+                                    <label for="adherant_id" class="small">Adherant</label>
+                                    <select name="adherant_id" id="adherant_id" class="form-select">
+                                        <option value="">-- Sélectionnez un adherant --</option>
+                                        @foreach ($adherants as $adherant)
+                                            <option value="{{ $adherant->id }}"
+                                                {{ (int) old('adherant_id', $operationFind->adherant_id) === (int) $adherant->id ? 'selected' : '' }}>
+                                                {{ $adherant->nom_adherant }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4" id="fournisseurSelectWrapper" style="display: none;">
+                                <div class="form-group">
+                                    <label for="fournisseur_id" class="small">Fournisseur</label>
+                                    <select name="fournisseur_id" id="fournisseur_id" class="form-select">
+                                        <option value="">-- Sélectionnez un fournisseur --</option>
+                                        @foreach ($fournisseurs as $fournisseur)
+                                            <option value="{{ $fournisseur->id }}"
+                                                {{ (int) old('fournisseur_id', $operationFind->fournisseur_id) === (int) $fournisseur->id ? 'selected' : '' }}>
+                                                {{ $fournisseur->nom_fournisseur }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div class="form-group">
                                     <label for="libelle" class="small">Libellé</label>
                                     <input type="text" class="form-control" id="libelle" name="libelle"
                                         placeholder="Entrez le libellé de l'opération" value="{{ old('libelle', $operationFind->libelle) }}">
@@ -150,4 +203,42 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const radios = document.querySelectorAll('.tier-type-radio');
+            const adherantWrapper = document.getElementById('adherantSelectWrapper');
+            const fournisseurWrapper = document.getElementById('fournisseurSelectWrapper');
+            const adherantSelect = document.getElementById('adherant_id');
+            const fournisseurSelect = document.getElementById('fournisseur_id');
+
+            function toggleTierSelect() {
+                const selected = document.querySelector('.tier-type-radio:checked')?.value;
+
+                if (selected === 'adherant') {
+                    adherantWrapper.style.display = '';
+                    fournisseurWrapper.style.display = 'none';
+                    fournisseurSelect.value = '';
+                    return;
+                }
+
+                if (selected === 'fournisseur') {
+                    fournisseurWrapper.style.display = '';
+                    adherantWrapper.style.display = 'none';
+                    adherantSelect.value = '';
+                    return;
+                }
+
+                adherantWrapper.style.display = 'none';
+                fournisseurWrapper.style.display = 'none';
+                adherantSelect.value = '';
+                fournisseurSelect.value = '';
+            }
+
+            radios.forEach(function(radio) {
+                radio.addEventListener('change', toggleTierSelect);
+            });
+
+            toggleTierSelect();
+        });
+    </script>
 @endsection

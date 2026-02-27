@@ -19,7 +19,7 @@
                             @method('PUT')
                             <div class="mb-3">
                                 <label for="code" class="small">Code</label>
-                                <input type="text" class="form-control" id="code" value="{{ $tacheFind->code }}" disabled>
+                                <input type="text" class="form-control" id="code" value="{{ $tacheFind->code }}" name="code">
                             </div>
                             <div class="mb-3">
                                 <label for="libelle" class="small">Libellé <span class="text-danger">*</span></label>

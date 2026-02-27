@@ -10,6 +10,8 @@ class Operation extends Model
         'date',
         'amount',
         'ligne_budget_id',
+        'adherant_id',
+        'fournisseur_id',
         'year',
         'libelle',
         'reference',
@@ -19,5 +21,15 @@ class Operation extends Model
     public function ligneBudget()
     {
         return $this->belongsTo(LigneBudget::class, 'ligne_budget_id');
+    }
+
+    public function adherant()
+    {
+        return $this->belongsTo(Adherant::class, 'adherant_id');
+    }
+
+    public function fournisseur()
+    {
+        return $this->belongsTo(Fournisseur::class, 'fournisseur_id');
     }
 }

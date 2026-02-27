@@ -41,8 +41,8 @@
                         <li class="nav-item"><a class="nav-link"
                                 href="{{ route('tresorerie.situation_financiere') }}">Suivi de la situation
                                 financière</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('gestion_operations.index') }}">Saisie
-                                des operations</a></li>
+                        {{-- <li class="nav-item"><a class="nav-link" href="{{ route('gestion_operations.index') }}">Saisie
+                                des operations</a></li> --}}
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -51,17 +51,18 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li class="nav-item"><a class="nav-link" href="{{ route('gestion_taches.index') }}">Saisi des taches</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('engagement.gestion_fournisseurs') }}">Saisi fournisseurs</a></li>
-
-                        <li class="nav-item"><a class="nav-link"
-                                href="{{ route('engagement.suivi_fournisseurs') }}">Suivi des fournisseurs</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('engagement.suivi_audits') }}">Suivi
-                                des
-                                audits traitées</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('engagement.suivi_fournisseurs') }}">Suivi des fournisseurs</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('engagement.suivi_audits') }}">Suivi des audits traitées</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('data.page') }}">DONNEES</a>
+                    <a class="nav-link" href="{{ route('data.prevision') }}">PRÉVISIONS</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('data.realisation') }}">RÉALISATION</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('collaborateurs.index') }}">COLLABORATEUR</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('config.page') }}">CONFIGURATION</a>
@@ -83,10 +84,10 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"
                             style="font-weight: bold;">
-                            {{ Auth::user()->nom }} {{ Auth::user()->prenom }}
+                            <i data-feather="user"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#">Profil</a></li>
+                            <li><a class="dropdown-item" href="{{ route('profile.index') }}">Profil</a></li>
                             <li>
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf

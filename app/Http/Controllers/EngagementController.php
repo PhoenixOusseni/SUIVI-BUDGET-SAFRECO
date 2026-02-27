@@ -109,11 +109,12 @@ class EngagementController extends Controller
             'nom_fournisseur' => 'required|string|max:255',
             'contact_fournisseur' => 'required|string|max:255',
             'email_fournisseur' => 'required|email|max:255',
+            'code' => 'nullable|string|max:255',
         ]);
 
         // Create a new Fournisseur record
         $fournisseur = new Fournisseur();
-        $fournisseur->code = 'FOUR-' . strtoupper(uniqid());
+        $fournisseur->code = $validatedData['code'];
         $fournisseur->nom_fournisseur = $validatedData['nom_fournisseur'];
         $fournisseur->contact_fournisseur = $validatedData['contact_fournisseur'];
         $fournisseur->email_fournisseur = $validatedData['email_fournisseur'];
@@ -138,6 +139,7 @@ class EngagementController extends Controller
             'nom_fournisseur' => 'required|string|max:255',
             'contact_fournisseur' => 'required|string|max:255',
             'email_fournisseur' => 'required|email|max:255',
+            'code' => 'nullable|string|max:255',
         ]);
 
         // Find the existing Fournisseur record
@@ -145,6 +147,7 @@ class EngagementController extends Controller
         $fournisseur->nom_fournisseur = $validatedData['nom_fournisseur'];
         $fournisseur->contact_fournisseur = $validatedData['contact_fournisseur'];
         $fournisseur->email_fournisseur = $validatedData['email_fournisseur'];
+        $fournisseur->code = $validatedData['code'];
         $fournisseur->save();
 
         // Redirect back with a success message

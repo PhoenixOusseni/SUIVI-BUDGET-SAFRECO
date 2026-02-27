@@ -17,14 +17,6 @@ class TacheController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
@@ -36,10 +28,11 @@ class TacheController extends Controller
             'date_echeance' => 'nullable|date',
             'taux' => 'nullable|numeric|min:0|max:100',
             'file' => 'nullable|file|mimes:pdf,doc,docx,jpg,png',
+            'code' => 'nullable|string|max:255',
         ]);
 
         $tache = new Tache();
-        $tache->code = 'TACH-' . strtoupper(uniqid());
+        $tache->code = $request->code;
         $tache->libelle = $request->libelle;
         $tache->description = $request->description;
         $tache->date_debut = $request->date_debut;
@@ -54,14 +47,6 @@ class TacheController extends Controller
         $tache->save();
 
         return redirect()->route('gestion_taches.index')->with('success', 'Tâche créée avec succès.');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Tache $tache)
-    {
-        //
     }
 
     /**
@@ -88,6 +73,7 @@ class TacheController extends Controller
             'date_echeance' => 'nullable|date',
             'taux' => 'nullable|numeric|min:0|max:100',
             'file' => 'nullable|file|mimes:pdf,doc,docx,jpg,png',
+            'code' => 'nullable|string|max:255',
         ]);
 
         $tache->libelle = $request->libelle;
@@ -95,6 +81,7 @@ class TacheController extends Controller
         $tache->date_debut = $request->date_debut;
         $tache->date_echeance = $request->date_echeance;
         $tache->taux = $request->taux;
+        $tache->code = $request->code;
 
         if ($request->hasFile('file')) {
             $filePath = $request->file('file')->store('taches_files', 'public');

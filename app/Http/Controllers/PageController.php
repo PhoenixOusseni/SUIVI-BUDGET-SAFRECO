@@ -25,9 +25,19 @@ class PageController extends Controller
     {
         return view('clients.pages.configs.index');
     }
-    
-    public function data()
+
+    public function prevision()
     {
-        return view('clients.pages.data.index');
+        return view('clients.pages.data.prevision');
+    }
+
+    public function realisation()
+    {
+        return view('clients.pages.data.realisation');
+    }
+
+    public function collaborateurs()
+    {
+        return view('clients.pages.collaborateurs.index');
     }
 }

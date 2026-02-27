@@ -23,7 +23,8 @@ class PrevisionController extends Controller
         // Récupère toutes les prévisions pour l'année, avec leurs mois et la ligne budgétaire associée
         // Assure que la relation 'codeBudget' (ou 'ligneBudget') est définie sur Prevision
         $previsions = Prevision::with(['months', 'ligneBudget']) // ou 'ligneBudget' suivant votre relation
-            ->where('year', $year)->get();
+            ->where('year', $year)
+            ->get();
 
         // Grouper par id de ligne budgétaire (nullable possible)
         $grouped = $previsions->groupBy('ligne_budget_id'); // adapte le nom de la clé si c'est code_budget_id
@@ -106,7 +107,7 @@ class PrevisionController extends Controller
                     [
                         'date' => $date,
                         'notes' => $notes,
-                    ]
+                    ],
                 );
 
                 // update date/notes si fournis (et différents)
@@ -173,20 +174,22 @@ class PrevisionController extends Controller
         }
     }
 
-
     /**
      * Importer des prévisions depuis un fichier Excel/CSV.
      */
     public function import(Request $request)
     {
         // Validation du fichier
-        $request->validate([
-            'file' => 'required|file|mimes:xlsx,xls,csv|max:10240', // max 10MB
-        ], [
-            'file.required' => 'Veuillez sélectionner un fichier à importer.',
-            'file.mimes' => 'Le fichier doit être au format Excel (xlsx, xls) ou CSV.',
-            'file.max' => 'Le fichier ne doit pas dépasser 10 Mo.',
-        ]);
+        $request->validate(
+            [
+                'file' => 'required|file|mimes:xlsx,xls,csv|max:10240', // max 10MB
+            ],
+            [
+                'file.required' => 'Veuillez sélectionner un fichier à importer.',
+                'file.mimes' => 'Le fichier doit être au format Excel (xlsx, xls) ou CSV.',
+                'file.max' => 'Le fichier ne doit pas dépasser 10 Mo.',
+            ],
+        );
 
         try {
             $file = $request->file('file');
@@ -211,17 +214,10 @@ class PrevisionController extends Controller
 
             // Return with appropriate message type
             if ($results['errors'] > 0) {
-                return redirect()
-                    ->route('gestion_previsions.index')
-                    ->with('warning', $message)
-                    ->with('import_messages', $results['messages']);
+                return redirect()->route('gestion_previsions.index')->with('warning', $message)->with('import_messages', $results['messages']);
             }
 
-            return redirect()
-                ->route('gestion_previsions.index')
-                ->with('success', $message)
-                ->with('import_messages', $results['messages']);
-
+            return redirect()->route('gestion_previsions.index')->with('success', $message)->with('import_messages', $results['messages']);
         } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
             $failures = $e->failures();
             $errors = [];
@@ -234,10 +230,9 @@ class PrevisionController extends Controller
                 ->back()
                 ->withErrors(['file' => 'Erreurs de validation dans le fichier'])
                 ->with('import_errors', $errors);
-
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error('Import error: ' . $e->getMessage(), [
-                'trace' => $e->getTraceAsString()
+                'trace' => $e->getTraceAsString(),
             ]);
 
             return redirect()
@@ -302,9 +297,7 @@ class PrevisionController extends Controller
                 $prevision->delete();
             });
 
-            return redirect()
-                ->route('gestion_previsions.index')
-                ->with('success', "Prévision supprimée avec succès.");
+            return redirect()->route('gestion_previsions.index')->with('success', 'Prévision supprimée avec succès.');
         } catch (Throwable $e) {
             return redirect()
                 ->back()
@@ -322,8 +315,7 @@ class PrevisionController extends Controller
         $ligneBudgetId = $request->input('ligne_budget_id');
 
         // Query de base
-        $query = Prevision::with(['months', 'ligneBudget'])
-            ->where('year', $year);
+        $query = Prevision::with(['months', 'ligneBudget'])->where('year', $year);
 
         // Filtre par ligne budgétaire si spécifié
         if ($ligneBudgetId) {
