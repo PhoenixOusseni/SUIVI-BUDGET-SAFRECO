@@ -39,6 +39,32 @@
             background: #f09103;
             margin: 10px auto 0;
         }
+
+        .form-control {
+            padding: 9px 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 5px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #1d3f7f;
+            box-shadow: 0 0 0 0.2rem rgba(29, 63, 127, 0.1);
+        }
+
+        .form-select {
+            padding: 9px 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 5px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-select:focus {
+            border-color: #1d3f7f;
+            box-shadow: 0 0 0 0.2rem rgba(29, 63, 127, 0.1);
+        }
     </style>
 </head>
 
@@ -101,6 +127,9 @@
             }
         });
     </script>
+
+    {{-- Stacks de scripts depuis les vues enfants --}}
+    @stack('scripts')
 </body>
 
 </html>

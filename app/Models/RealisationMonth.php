@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class RealisationMonth extends Model
 {
     protected $fillable = [
         'realisation_id',
-        'month', // 1..12 
+        'month', // 1..12
         'amount', // decimal
     ];
 

@@ -9,19 +9,6 @@
                 @include('clients.pages.configs.menu_config')
 
                 <div class="row">
-                    <div class="col-sm-12">
-                        <div class="alert alert-info" role="alert">
-                            <h4 class="alert-heading">Bienvenue dans la section de configuration de l'application!</h4>
-                            <p>Dans cette section, vous pouvez gérer les paramètres essentiels de l'application pour
-                                personnaliser son fonctionnement selon vos besoins. Utilisez les options disponibles
-                                pour mettre à jour les informations de la société, gérer les rubriques, les codes
-                                budgétaires, les lignes budgétaires, ainsi que les utilisateurs et leurs rôles et
-                                permissions.</p>
-                            <hr>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
                     <div class="col-md-6">
                         <p>
                             <strong>Info de la société:</strong> Gérez les informations de votre entreprise, telles que
