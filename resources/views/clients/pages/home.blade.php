@@ -61,7 +61,7 @@
         gap: 1rem; margin-bottom: 1.5rem;
     }
     .kpi-card {
-        background: var(--card-bg); border-radius: var(--radius-lg);
+        background: var(--card-bg); border-radius: 5px;
         padding: 1.25rem 1.25rem 1rem;
         box-shadow: var(--shadow-sm); border: 1px solid var(--border);
         display: flex; flex-direction: column; gap: .55rem;
@@ -133,7 +133,7 @@
 
     /* ── CHART CARD ── */
     .chart-card {
-        background: var(--card-bg); border-radius: var(--radius-lg);
+        background: var(--card-bg); border-radius: 5px;
         padding: 1.25rem; box-shadow: var(--shadow-sm);
         border: 1px solid var(--border);
     }
@@ -174,7 +174,7 @@
 
     /* ── OPERATIONS TABLE ── */
     .ops-table-wrap {
-        background: var(--card-bg); border-radius: var(--radius-lg);
+        background: var(--card-bg); border-radius: 5px;
         padding: 1.25rem; box-shadow: var(--shadow-sm);
         border: 1px solid var(--border); margin-bottom: 1.5rem;
     }
@@ -214,7 +214,7 @@
         gap: 1rem;
     }
     .tache-card {
-        background: var(--card-bg); border-radius: var(--radius);
+        background: var(--card-bg); border-radius: 5px;
         padding: 1rem 1.1rem; box-shadow: var(--shadow-sm);
         border: 1px solid var(--border);
         display: flex; flex-direction: column; gap: .55rem;

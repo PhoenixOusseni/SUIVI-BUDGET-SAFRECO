@@ -7,14 +7,12 @@
             <div class="card-body">
 
                 <div class="col-sm-12 mb-3">
-                    <a href="{{ route('data.realisation.saisi_realisation') }}" class="btn btn-secondary"><i
+                    <a href="{{ route('data.realisation.saisi_realisation') }}" class="btn btn-secondary btn-sm"><i
                             data-feather="plus"></i>&thinsp;&thinsp; Saisi des réalisations
                     </a>
-                    <a href="{{ route('gestion_realisations.index') }}" class="btn btn-secondary"><i
+                    <a href="{{ route('gestion_realisations.index') }}" class="btn btn-secondary btn-sm"><i
                             data-feather="align-right"></i>&thinsp;&thinsp; Liste des réalisations
                     </a>
-                    <a href="#" class="btn btn-light"><i data-feather="align-right"></i>&thinsp;&thinsp;
-                        Parametres</a>
                 </div>
 
                 <div class="row">

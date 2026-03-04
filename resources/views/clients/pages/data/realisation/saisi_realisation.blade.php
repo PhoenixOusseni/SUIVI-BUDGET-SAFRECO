@@ -6,7 +6,12 @@
         <div class="card">
             <div class="card-body">
                 {{-- Include the menu configuration partial --}}
-                @include('clients.pages.data.menu_data')
+                <div class="col-sm-12 mb-3">
+                    <a href="{{ route('data.realisation.saisi_realisation') }}" class="btn btn-secondary btn-sm"><i
+                            data-feather="plus"></i>&thinsp;&thinsp; Saisi des réalisations</a>
+                    <a href="{{ route('gestion_realisations.index') }}" class="btn btn-secondary btn-sm"><i
+                            data-feather="align-right"></i>&thinsp;&thinsp; Liste des réalisations</a>
+                </div>
 
                 <div class="row">
                     <div class="col-sm-12">
@@ -95,9 +100,8 @@
 
                             <div class="d-flex">
                                 <button type="submit" class="btn btn-primary">
-                                    <i class="bi bi-save"></i> Enregistrer la réalisation
+                                    <i class="bi bi-save"></i>&thinsp;&thinsp; Enregistrer la réalisation
                                 </button>
-                                <a href="#" class="btn btn-secondary ms-2">Retour à la liste</a>
                             </div>
                         </form>
                     </div>

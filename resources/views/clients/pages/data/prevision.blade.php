@@ -7,10 +7,10 @@
             <div class="card-body">
 
                 <div class="col-sm-12 mb-3">
-                    <a href="{{ route('data.prevision.saisi_prevision') }}" class="btn btn-warning"> <i
+                    <a href="{{ route('data.prevision.saisi_prevision') }}" class="btn btn-warning btn-sm"> <i
                             data-feather="plus"></i>&thinsp;&thinsp; Saisi des prévisions
                     </a>
-                    <a href="{{ route('gestion_previsions.index') }}" class="btn btn-warning"> <i
+                    <a href="{{ route('gestion_previsions.index') }}" class="btn btn-warning btn-sm"> <i
                             data-feather="align-right"></i>&thinsp;&thinsp; Liste des prévisions
                     </a>
                 </div>

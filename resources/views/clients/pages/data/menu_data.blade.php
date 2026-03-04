@@ -8,6 +8,4 @@
             data-feather="plus"></i>&thinsp;&thinsp; Saisi des réalisations</a>
     <a href="{{ route('gestion_realisations.index') }}" class="btn btn-secondary"><i
             data-feather="align-right"></i>&thinsp;&thinsp; Liste des réalisations</a>
-    <a href="#" class="btn btn-light"><i data-feather="align-right"></i>&thinsp;&thinsp;
-        Parametres</a>
 </div>

@@ -9,7 +9,12 @@
         <div class="card">
             <div class="card-body">
                 {{-- Include the menu data partial --}}
-                @include('clients.pages.data.menu_data')
+                <div class="col-sm-12 mb-3">
+                    <a href="{{ route('data.realisation.saisi_realisation') }}" class="btn btn-secondary btn-sm"><i
+                            data-feather="plus"></i>&thinsp;&thinsp; Saisi des réalisations</a>
+                    <a href="{{ route('gestion_realisations.index') }}" class="btn btn-secondary btn-sm"><i
+                            data-feather="align-right"></i>&thinsp;&thinsp; Liste des réalisations</a>
+                </div>
 
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <div class="col-md-6">
@@ -41,14 +46,14 @@
                                 </select>
                             </div>
                             <div class="col-auto">
-                                <button class="btn btn-outline-secondary">Filtrer</button>
+                                <button class="btn btn-outline-secondary btn-sm">Filtrer</button>
                             </div>
                         </form>
                     </div>
                     <div class="d-flex gap-2">
                         <div class="">
                             {{-- Import Button --}}
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
                                 data-bs-target="#importModal">
                                 <i class="fas fa-file-import"></i>&nbsp;&nbsp; Importer
                             </button>
@@ -56,14 +61,14 @@
                         <div class="">
                             {{-- Export Button --}}
                             <a href="{{ route('realisations.export', ['year' => request('year', date('Y')), 'ligne_budget_id' => request('ligne_budget_id')]) }}"
-                                class="btn btn-success">
+                                class="btn btn-success btn-sm">
                                 <i class="fas fa-file-export"></i>&nbsp;&nbsp; Exporter
                             </a>
                         </div>
                         <div class="">
                             {{-- Print Button --}}
                             <a href="{{ route('realisations.print', ['year' => request('year', date('Y')), 'ligne_budget_id' => request('ligne_budget_id')]) }}"
-                                class="btn btn-success" target="_blank">
+                                class="btn btn-success btn-sm" target="_blank">
                                 <i class="fas fa-print"></i>&nbsp;&nbsp; Imprimer
                             </a>
                         </div>
@@ -190,11 +195,10 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="mt-4">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-upload"></i> Importer
+                    <div class="m-3">
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            <i class="fas fa-upload"></i>&thinsp;&thinsp; Importer
                         </button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
                     </div>
                 </form>
             </div>
