@@ -1,112 +1,86 @@
 @extends('clients.layouts.master')
 
 @section('content')
-    <div class="container mb-5">
-        <h4 class="page-title">SAISI DES REALISATIONS</h4>
-        <div class="card">
-            <div class="card-body">
-                {{-- Include the menu configuration partial --}}
-                <div class="col-sm-12 mb-3">
-                    <a href="{{ route('data.realisation.saisi_realisation') }}" class="btn btn-secondary btn-sm"><i
-                            data-feather="plus"></i>&thinsp;&thinsp; Saisi des réalisations</a>
-                    <a href="{{ route('gestion_realisations.index') }}" class="btn btn-secondary btn-sm"><i
-                            data-feather="align-right"></i>&thinsp;&thinsp; Liste des réalisations</a>
-                </div>
+<div class="container-fluid px-3 pb-4">
 
-                <div class="row">
-                    <div class="col-sm-12">
-                        {{-- Additional content can be added here --}}
-                        <form action="{{ route('gestion_realisations.store') }}" method="POST">
-                            @csrf
-                            {{-- Ligne Budget and Date/Year Selection --}}
-                            <div class="row mb-3">
-                                <div class="col-md-5">
-                                    <label for="ligne_budget_id" class="form-label">Ligne budgétaire</label>
-                                    <select name="ligne_budget_id" id="ligne_budget_id" class="form-select">
-                                        <option value="">Sélectionner un élément</option>
-                                        @foreach ($lignesBudgets as $ligne)
-                                            <option value="{{ $ligne->id }}"
-                                                {{ (int) old('ligne_budget_id') === $ligne->id ? 'selected' : '' }}>
-                                                {{ $ligne->code }}{{ isset($ligne->intitule) ? ' - ' . $ligne->intitule : '' }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <label for="date" class="form-label">Date de la Réalisation</label>
-                                    <input type="date" id="date" name="date" value="{{ old('date') }}"
-                                        class="form-control">
-                                </div>
-
-                                <div class="col-md-2">
-                                    <label for="year" class="form-label">Année Réalisation</label>
-                                    <select name="year" id="year" class="form-select">
-                                        @php
-                                            $current = old('year', date('Y'));
-                                        @endphp
-                                        @foreach ($years as $y)
-                                            <option value="{{ $y }}"
-                                                {{ (int) $current === (int) $y ? 'selected' : '' }}>{{ $y }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-
-                            {{-- Months grid --}}
-                            @php
-                                $months = [
-                                    1 => 'Janvier',
-                                    2 => 'Février',
-                                    3 => 'Mars',
-                                    4 => 'Avril',
-                                    5 => 'Mai',
-                                    6 => 'Juin',
-                                    7 => 'Juillet',
-                                    8 => 'Août',
-                                    9 => 'Septembre',
-                                    10 => 'Octobre',
-                                    11 => 'Novembre',
-                                    12 => 'Décembre',
-                                ];
-                                $oldMonths = old('months', []);
-                            @endphp
-
-                            <div class="card mb-4">
-                                <div class="card-body bg-light">
-                                    <div class="row">
-                                        @foreach ($months as $num => $label)
-                                            <div class="col-md-3 mb-3">
-                                                <label class="form-label">{{ $label }}</label>
-                                                <input type="number" step="0.01" min="0" name="months[{{ $num }}]" class="form-control"
-                                                    value="{{ array_key_exists($num, (array) $oldMonths) ? $oldMonths[$num] : '' }}"
-                                                    placeholder="Saisir le montant">
-                                            </div>
-                                            @if ($num % 4 === 0 && $num !== 12)
-                                    </div>
-                                    <div class="row">
-                                        @endif
-                                        @endforeach
-                                    </div>
-                                </div>
-                            </div>
-
-                            {{-- Notes (optional) --}}
-                            <div class="mb-3">
-                                <label for="notes" class="form-label">Notes (optionnel)</label>
-                                <textarea name="notes" id="notes" class="form-control" rows="2">{{ old('notes') }}</textarea>
-                            </div>
-
-                            <div class="d-flex">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="bi bi-save"></i>&thinsp;&thinsp; Enregistrer la réalisation
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+    <div class="page-hero">
+        <div class="d-flex align-items-start justify-content-between flex-wrap gap-2">
+            <div>
+                <p class="hero-title"><i class="fas fa-chart-line me-2"></i>Saisie des Réalisations</p>
+                <p class="hero-sub">Enregistrez les montants réalisés par mois</p>
             </div>
+            <a href="{{ route('gestion_realisations.index') }}" class="hero-badge">
+                <i class="fas fa-list"></i> Liste des réalisations
+            </a>
         </div>
     </div>
+
+    <div class="form-card">
+        <div class="form-card-header">
+            <div class="fch-icon"><i class="fas fa-plus"></i></div>
+            <p class="fch-title">Nouvelle réalisation</p>
+        </div>
+        <div class="form-card-body">
+            <form action="{{ route('gestion_realisations.store') }}" method="POST">
+                @csrf
+                <div class="row g-3 mb-4">
+                    <div class="col-md-5">
+                        <label for="ligne_budget_id" class="form-label">Ligne budgétaire <span class="text-danger">*</span></label>
+                        <select name="ligne_budget_id" id="ligne_budget_id" class="form-select" required>
+                            <option value="">Sélectionner un élément</option>
+                            @foreach ($lignesBudgets as $ligne)
+                                <option value="{{ $ligne->id }}" {{ (int) old('ligne_budget_id') === $ligne->id ? 'selected' : '' }}>
+                                    {{ $ligne->code }}{{ isset($ligne->intitule) ? ' - ' . $ligne->intitule : '' }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="date" class="form-label">Date de la réalisation</label>
+                        <input type="date" id="date" name="date" value="{{ old('date') }}" class="form-control">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="year" class="form-label">Année réalisation</label>
+                        <select name="year" id="year" class="form-select">
+                            @php $current = old('year', date('Y')); @endphp
+                            @foreach ($years as $y)
+                                <option value="{{ $y }}" {{ (int) $current === (int) $y ? 'selected' : '' }}>{{ $y }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                @php
+                    $months = [1=>'Janvier',2=>'Février',3=>'Mars',4=>'Avril',5=>'Mai',6=>'Juin',
+                               7=>'Juillet',8=>'Août',9=>'Septembre',10=>'Octobre',11=>'Novembre',12=>'Décembre'];
+                    $oldMonths = old('months', []);
+                @endphp
+
+                <div class="p-3 mb-4" style="background:var(--surface); border-radius:10px; border:1px solid var(--border);">
+                    <div class="row g-3">
+                        @foreach ($months as $num => $label)
+                            <div class="col-md-3">
+                                <label class="form-label">{{ $label }}</label>
+                                <input type="number" step="0.01" min="0" name="months[{{ $num }}]" class="form-control"
+                                    value="{{ array_key_exists($num, (array) $oldMonths) ? $oldMonths[$num] : '' }}"
+                                    placeholder="Montant">
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="notes" class="form-label">Notes (optionnel)</label>
+                    <textarea name="notes" id="notes" class="form-control" rows="2">{{ old('notes') }}</textarea>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn-primary-custom"><i class="fas fa-save"></i> Enregistrer la réalisation</button>
+                    <a href="{{ route('gestion_realisations.index') }}" class="btn-secondary-custom"><i class="fas fa-times"></i> Annuler</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
 @endsection

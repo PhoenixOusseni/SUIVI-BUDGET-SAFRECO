@@ -1,85 +1,95 @@
 @extends('clients.layouts.master')
 
 @section('content')
-    <div class="container">
-        <h4 class="page-title">GESTION DES RUBRIQUES</h4>
-        <div class="card">
-            <div class="card-body">
-                {{-- Include the menu configuration partial --}}
-                @include('clients.pages.configs.menu_config')
+<div class="container-fluid px-3 pb-4">
 
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="alert alert-info" role="alert">
-                            <h4 class="alert-heading">Modification de la rubrique "{{ $findRubrique->code }}"</h4>
-                            <hr>
+    <div class="page-hero">
+        <div class="d-flex align-items-start justify-content-between flex-wrap gap-2">
+            <div>
+                <p class="hero-title"><i class="fas fa-tags me-2"></i>Modifier une Rubrique</p>
+                <p class="hero-sub">Modification de : <strong>{{ $findRubrique->intitule }}</strong></p>
+            </div>
+            <a href="{{ route('gestion_rubriques.index') }}" class="hero-badge">
+                <i class="fas fa-arrow-left"></i> Retour
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        {{-- Formulaire --}}
+        <div class="col-lg-4">
+            <div class="form-card">
+                <div class="form-card-header">
+                    <div class="fch-icon"><i class="fas fa-edit"></i></div>
+                    <p class="fch-title">Modifier — {{ $findRubrique->code }}</p>
+                </div>
+                <div class="form-card-body">
+                    <form action="{{ route('gestion_rubriques.update', $findRubrique->id) }}" method="POST">
+                        @csrf @method('PUT')
+                        <div class="mb-3">
+                            <label for="code" class="form-label">Code</label>
+                            <input type="text" class="form-control" id="code" name="code" value="{{ $findRubrique->code }}" disabled>
                         </div>
+                        <div class="mb-3">
+                            <label for="intitule" class="form-label">Nom de la rubrique <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="intitule" name="intitule" value="{{ $findRubrique->intitule }}" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" id="description" name="description" rows="3">{{ $findRubrique->description }}</textarea>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn-primary-custom"><i class="fas fa-save"></i> Mettre à jour</button>
+                            <a href="{{ route('gestion_rubriques.index') }}" class="btn-secondary-custom"><i class="fas fa-times"></i> Annuler</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {{-- Liste --}}
+        <div class="col-lg-8">
+            <div class="table-card">
+                <div class="table-card-header">
+                    <div class="tch-icon"><i class="fas fa-tags"></i></div>
+                    <div>
+                        <p class="tch-title">Liste des rubriques</p>
+                        <p class="tch-sub mb-0">{{ count($rubriques) }} rubrique(s)</p>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <table class="data-table table table-striped table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Code</th>
-                                    <th>Nom de la Rubrique</th>
-                                    <th>Description</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($rubriques as $rubrique)
-                                    <tr>
-                                        <td>{{ $rubrique->code }}</td>
-                                        <td>{{ $rubrique->intitule }}</td>
-                                        <td>{{ $rubrique->description }}</td>
-                                        <td>
-                                            <a href="{{ route('gestion_rubriques.edit', $rubrique->id) }}"
-                                                class="btn btn-sm btn-warning">
-                                                <i data-feather="edit"></i>&thinsp;&thinsp; Modifier
-                                            </a>
-                                            <form action="{{ route('gestion_rubriques.destroy', $rubrique->id) }}"
-                                                method="POST" style="display:inline;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger"
-                                                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette rubrique ?')"><i
-                                                        data-feather="trash-2"></i>&thinsp;&thinsp; Supprimer</button>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-sm table-std mb-0" id="datatablesSimple">
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Nom de la rubrique</th>
+                                <th>Description</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($rubriques as $rubrique)
+                                <tr class="{{ $rubrique->id === $findRubrique->id ? 'table-active' : '' }}">
+                                    <td><span class="status-badge blue">{{ $rubrique->code }}</span></td>
+                                    <td style="font-weight:600;">{{ $rubrique->intitule }}</td>
+                                    <td>{{ $rubrique->description }}</td>
+                                    <td>
+                                        <div class="action-group">
+                                            <a href="{{ route('gestion_rubriques.edit', $rubrique->id) }}" class="btn-warning-custom"><i class="fas fa-edit"></i></a>
+                                            <form action="{{ route('gestion_rubriques.destroy', $rubrique->id) }}" method="POST" style="display:inline-block;">
+                                                @csrf @method('DELETE')
+                                                <button type="submit" class="btn-danger-custom" onclick="return confirm('Supprimer cette rubrique ?')"><i class="fas fa-trash-alt"></i></button>
                                             </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                {{-- More rows can be added here --}}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="col-md-6">
-                        <form action="{{ route('gestion_rubriques.update', $findRubrique->id) }}" method="POST">
-                            @csrf
-                            @method('PUT')
-                            <div class="mb-3">
-                                <label for="code" class="form-label">Code</label>
-                                <input type="text" class="form-control" id="code" name="code"
-                                    placeholder="Entrez le code" value="{{ $findRubrique->code }}" disabled>
-                            </div>
-                            <div class="mb-3">
-                                <label for="nom" class="form-label">Nom de la Rubrique</label>
-                                <input type="text" class="form-control" id="nom" name="intitule"
-                                    placeholder="Entrez le nom" value="{{ $findRubrique->intitule }}">
-                            </div>
-                            <div class="mb-3">
-                                <label for="description" class="form-label">Description</label>
-                                <textarea class="form-control" id="description" name="description" rows="3" placeholder="Entrez la description">{{ $findRubrique->description }}</textarea>
-                            </div>
-                            <div class="mb-3">
-                                <button type="submit" class="btn btn-primary">
-                                    <i data-feather="edit"></i> &thinsp;&thinsp; Modifier
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
+
+</div>
 @endsection

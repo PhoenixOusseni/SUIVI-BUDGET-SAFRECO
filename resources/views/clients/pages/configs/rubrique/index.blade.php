@@ -1,109 +1,93 @@
 @extends('clients.layouts.master')
 
 @section('content')
-    <div class="container">
-        <h4 class="page-title">GESTION DES RUBRIQUES</h4>
-        <div class="card">
-            <div class="card-body">
-                {{-- Include the menu configuration partial --}}
-                @include('clients.pages.configs.menu_config')
+<div class="container-fluid px-3 pb-4">
 
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="alert alert-info" role="alert">
-                            <h4 class="alert-heading">Bienvenue dans la section de gestion des rubriques!</h4>
-                            <p>Dans cette section, vous pouvez ajouter, modifier ou supprimer des rubriques pour organiser
-                                vos données budgétaires de manière efficace.</p>
-                            <hr>
-                        </div>
-                    </div>
+    <div class="page-hero">
+        <div class="d-flex align-items-start justify-content-between flex-wrap gap-2">
+            <div>
+                <p class="hero-title"><i class="fas fa-tags me-2"></i>Gestion des Rubriques</p>
+                <p class="hero-sub">Organisez vos données budgétaires par rubriques</p>
+            </div>
+            <button type="button" class="btn-primary-custom" data-bs-toggle="modal" data-bs-target="#addRubriqueModal">
+                <i class="fas fa-plus"></i> Nouvelle rubrique
+            </button>
+        </div>
+    </div>
+
+    {{-- Modal Ajout --}}
+    <div class="modal fade" id="addRubriqueModal" tabindex="-1" aria-labelledby="addRubriqueModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="border-radius:14px; border:none; box-shadow:0 8px 32px rgba(0,61,130,.15);">
+                <div class="modal-header modal-header-blue">
+                    <h5 class="modal-title" id="addRubriqueModalLabel"><i class="fas fa-plus me-2"></i>Nouvelle rubrique</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="row">
-                    <div class="col-sm-12">
-                        <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal"
-                            data-bs-target="#exampleModal">
-                            <i data-feather="plus-circle"></i>&thinsp;&thinsp; Ajouter une nouvelle rubrique
-                        </button>
-
-                        <!-- Modal -->
-                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                            aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Ajouter une nouvelle rubrique</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form action="{{ route('gestion_rubriques.store') }}" method="POST">
-                                            @csrf
-                                            <div class="mb-3">
-                                                <label for="code" class="form-label">Code</label>
-                                                <input type="text" class="form-control" id="code" name="code"
-                                                    placeholder="Entrez le code">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="nom" class="form-label">Nom de la Rubrique</label>
-                                                <input type="text" class="form-control" id="nom" name="intitule"
-                                                    placeholder="Entrez le nom">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="description" class="form-label">Description</label>
-                                                <textarea class="form-control" id="description" name="description" rows="3" placeholder="Entrez la description"></textarea>
-                                            </div>
-                                            <div class="mb-3">
-                                                <button type="submit" class="btn btn-primary">
-                                                    <i data-feather="save"></i> &thinsp;&thinsp; Enregistrer
-                                                </button>
-                                                <button type="button" class="btn btn-danger"
-                                                    data-bs-dismiss="modal">
-                                                    <i data-feather="x-circle"></i> &thinsp;&thinsp; Fermer
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
+                <div class="modal-body p-4">
+                    <form action="{{ route('gestion_rubriques.store') }}" method="POST">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="code" class="form-label">Code</label>
+                            <input type="text" class="form-control" id="code" name="code" placeholder="Entrez le code">
                         </div>
-
-                        <table class="data-table table table-striped table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Code</th>
-                                    <th>Nom de la Rubrique</th>
-                                    <th>Description</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($rubriques as $rubrique)
-                                    <tr>
-                                        <td>{{ $rubrique->code }}</td>
-                                        <td>{{ $rubrique->intitule }}</td>
-                                        <td>{{ $rubrique->description }}</td>
-                                        <td>
-                                            <a href="{{ route('gestion_rubriques.edit', $rubrique->id) }}"
-                                                class="btn btn-sm btn-warning">
-                                                <i data-feather="edit"></i>&thinsp;&thinsp; Modifier
-                                            </a>
-                                            <form action="{{ route('gestion_rubriques.destroy', $rubrique->id) }}"
-                                                method="POST" style="display:inline;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger"
-                                                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette rubrique ?')"><i
-                                                        data-feather="trash-2"></i>&thinsp;&thinsp; Supprimer</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                {{-- More rows can be added here --}}
-                            </tbody>
-                        </table>
-                    </div>
+                        <div class="mb-3">
+                            <label for="intitule" class="form-label">Nom de la rubrique <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="intitule" name="intitule" placeholder="Entrez le nom" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" id="description" name="description" rows="3" placeholder="Entrez la description"></textarea>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn-primary-custom"><i class="fas fa-save"></i> Enregistrer</button>
+                            <button type="button" class="btn-secondary-custom" data-bs-dismiss="modal"><i class="fas fa-times"></i> Annuler</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+
+    {{-- Table --}}
+    <div class="table-card">
+        <div class="table-card-header">
+            <div class="tch-icon"><i class="fas fa-tags"></i></div>
+            <div>
+                <p class="tch-title">Liste des rubriques</p>
+                <p class="tch-sub mb-0">{{ count($rubriques) }} rubrique(s)</p>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-sm table-std mb-0" id="datatablesSimple">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Nom de la rubrique</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($rubriques as $rubrique)
+                        <tr>
+                            <td><span class="status-badge blue">{{ $rubrique->code }}</span></td>
+                            <td style="font-weight:600;">{{ $rubrique->intitule }}</td>
+                            <td>{{ $rubrique->description }}</td>
+                            <td>
+                                <div class="action-group">
+                                    <a href="{{ route('gestion_rubriques.edit', $rubrique->id) }}" class="btn-warning-custom"><i class="fas fa-edit"></i></a>
+                                    <form action="{{ route('gestion_rubriques.destroy', $rubrique->id) }}" method="POST" style="display:inline-block;">
+                                        @csrf @method('DELETE')
+                                        <button type="submit" class="btn-danger-custom" onclick="return confirm('Supprimer cette rubrique ?')"><i class="fas fa-trash-alt"></i></button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
 @endsection

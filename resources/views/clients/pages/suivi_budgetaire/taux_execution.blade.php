@@ -1,308 +1,117 @@
 @extends('clients.layouts.master')
 
 @section('content')
-    <div class="container-fluid">
-        <div class="container mt-2">
-            <h2 class="mb-4 page-title">Suivi du Taux d’Exécution du Budget</h2>
-            <p class="text-center">Bienvenue dans la section de suivi du taux d’exécution du budget. Ici, vous pouvez suivre
-                et gérer votre budget
-                efficacement.</p>
-            <!-- Ajoutez ici le contenu spécifique au suivi du taux d’exécution du budget -->
-        </div>
 
-        <div class="d-flex justify-content-between align-items-center mb-3 mt-3">
-            <h3 class="mb-0 text-danger">Taux d'exécution — Année {{ $year }}</h3>
-            <form class="d-flex" method="GET" action="#">
-                <select name="year" class="form-select me-2" style="min-width: 250px">
-                    @for ($y = date('Y') - 3; $y <= date('Y') + 3; $y++)
-                        <option value="{{ $y }}" {{ $y == $year ? 'selected' : '' }}>{{ $y }}</option>
-                    @endfor
-                </select>
-                <button class="btn btn-outline-primary">
-                    <i class="fas fa-filter"></i>&nbsp;Filtrer
-                </button>
-            </form>
-        </div>
+<div class="container-fluid px-3 pb-4">
 
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3 class="mb-0 text-danger"></h3>
+    {{-- ── Page hero ─────────────────────────────────── --}}
+    <div class="page-hero">
+        <div class="d-flex align-items-start justify-content-between flex-wrap gap-2">
             <div>
-                <a href="{{ route('tresorerie.export_excel') }}?year={{ $year }}" class="btn btn-success">
-                    <i class="fas fa-file-excel"></i>&nbsp;&nbsp;Exporter vers Excel
-                </a>
-                <a href="{{ route('tresorerie.print_situation_financiere') }}?year={{ $year }}" target="_blank"
-                    class="btn btn-success">
-                    <i class="fas fa-print"></i>&nbsp;&nbsp;Imprimer
-                </a>
+                <p class="hero-title"><i class="fas fa-chart-line me-2"></i>Suivi du Taux d'Exécution Budgétaire</p>
+                <p class="hero-sub">Analyse mensuelle des prévisions, réalisations et écarts — Année <strong>{{ $year }}</strong></p>
             </div>
-        </div>
-
-        @php
-            // Formatting helpers
-            $fmtAmount = fn($v) => $v !== null && $v != 0.0 ? number_format((float) $v, 0, ',', ' ') : '';
-            $fmtPercent = fn($v) => $v === null ? '' : number_format($v * 100, 1) . '%';
-
-            // color by rate: >=95% green, 85-94.99% yellow, <85% red. null = grey
-            $rateClass = function ($rate) {
-                if ($rate === null) {
-                    return 'bg-light text-muted';
-                }
-                $r = $rate * 100;
-                if ($r >= 95) {
-                    return 'bg-success text-success';
-                }
-                if ($r >= 85 && $r < 95) {
-                    return 'bg-warning text-warning';
-                }
-                if ($r < 85) {
-                    return 'bg-danger text-danger';
-                }
-            };
-        @endphp
-
-        {{--  Rest of the content remains unchanged     --}}
-        @php
-            // Formatting helpers
-            $fmtAmount = fn($v) => $v !== null && $v != 0.0 ? number_format((float) $v, 0, ',', ' ') : '';
-            // Calculer le taux restant (100% - taux d'exécution)
-$fmtPercent = fn($v) => $v === null ? '' : number_format((1 - $v) * 100, 1) . '%';
-
-            // color by rate: >=95% green, 85-94.99% yellow, <85% red. null = grey
-            $ratesClass = function ($rate) {
-                if ($rate === null) {
-                    return $rate;
-                }
-                $var = $rate * 100;
-                if ($var >= 95) {
-                    return $var;
-                }
-                if ($var >= 85 && $var < 95) {
-                    return $var;
-                }
-                if ($var < 85) {
-                    return $var;
-                }
-            };
-        @endphp
-
-        <div class="card mb-5">
-            <div class="card-body">
-                <h3 class="mb-3 text-success">Etat du suivi de taux d'execution</h3>
-                <div class="table-responsive">
-                    <table class="table table-bordered table-sm table-exec" style="min-width:2500px;">
-                        <!-- reserve explicitement une largeur pour la colonne Libellés -->
-                        <colgroup>
-                            <col /> <!-- colonne 1 : placeholder (si tu as une colonne code avant libellé) -->
-                            <col style="width:420px" /> <!-- colonne Libellés -->
-                            @for ($i = 1; $i <= 12; $i++)
-                                <col /> <!-- colonnes mois (laissent le navigateur distribuer la largeur restante) -->
-                            @endfor
-                        </colgroup>
-
-                        <thead class="table-light text-center align-middle">
-                            <tr>
-                                <th rowspan="2">Code</th>
-                                <th rowspan="2" class="libelle-col">Libellés</th>
-                                @foreach ($monthsLabels as $m)
-                                    <th colspan="3"
-                                        style="background: rgba(243, 144, 83, 0.71); border-right: 1px solid #000;">
-                                        {{ $m }}</th>
-                                @endforeach
-                            </tr>
-                            <tr>
-                                @foreach ($monthsLabels as $m)
-                                    <th class="small">Prévision</th>
-                                    <th class="small">Réalisation</th>
-                                    <th class="small" style="border-right: 1px solid #000;">Écart</th>
-                                @endforeach
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            @foreach ($rows as $row)
-                                {{-- ligne d'en-tête pour code + libellé --}}
-                                <tr>
-                                    <td class="align-middle text-center"><strong>{{ $row['code'] }}</strong></td>
-                                    <td class="libelle-col" style="min-width:300px;">
-                                        <strong>{{ $row['libelle'] }}</strong>
-                                    </td>
-
-                                    {{-- on affiche prévision/réalisation/écart par mois (ou 3 colonnes groupées) --}}
-                                    @for ($mo = 1; $mo <= 12; $mo++)
-                                        <td class="text-end" style="min-width:100px;">
-                                            {{ number_format($row['preMonths'][$mo] ?? ' ', 0, ',', ' ') }}</td>
-                                        <td class="text-end" style="min-width:100px;">
-                                            {{ number_format($row['realMonths'][$mo] ?? ' ', 0, ',', ' ') }}</td>
-                                        <td class="text-end" style="min-width:100px; border-right: 1px solid #000;">
-                                            <strong>{{ number_format($row['ecarts'][$mo] ?? ' ', 0, ',', ' ') }}</strong>
-                                        </td>
-                                    @endfor
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div class="card mb-5">
-            <div class="card-body">
-                <h3 class="mb-3 text-success">Etat du suivi des variations</h3>
-                <div class="table-responsive">
-                    <table class="table table-bordered table-sm table-exec" style="min-width:2500px;">
-                        <!-- reserve explicitement une largeur pour la colonne Libellés -->
-                        <colgroup>
-                            <col /> <!-- colonne 1 : placeholder (si tu as une colonne code avant libellé) -->
-                            <col style="width:420px" /> <!-- colonne Libellés -->
-                            @for ($i = 1; $i <= 12; $i++)
-                                <col /> <!-- colonnes mois (laissent le navigateur distribuer la largeur restante) -->
-                            @endfor
-                        </colgroup>
-
-                        <thead class="table-light text-center align-middle">
-                            <tr>
-                                <th rowspan="2">Code</th>
-                                <th rowspan="2" class="libelle-col">Libellés</th>
-                                @foreach ($monthsLabels as $m)
-                                    <th colspan="2"
-                                        style="background: rgba(243, 144, 83, 0.71); border-right: 1px solid #000;">
-                                        {{ $m }}</th>
-                                @endforeach
-                            </tr>
-                            <tr>
-                                @foreach ($monthsLabels as $m)
-                                    <th class="small">Variation</th>
-                                    <th class="small" style="border-right: 1px solid #000;">Taux</th>
-                                @endforeach
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            @foreach ($rows as $row)
-                                {{-- ligne d'en-tête pour code + libellé --}}
-                                <tr>
-                                    <td class="align-middle text-center"><strong>{{ $row['code'] }}</strong></td>
-                                    <td class="libelle-col" style="min-width:300px;">
-                                        <strong>{{ $row['libelle'] }}</strong>
-                                    </td>
-
-                                    {{-- on affiche prévision/réalisation/écart par mois (ou 3 colonnes groupées) --}}
-                                    @for ($mo = 1; $mo <= 12; $mo++)
-                                        <td class="text-end" style="min-width:100px;">
-                                            {{ number_format($row['ecarts'][$mo] ?? ' ', 0, ',', ' ') }}</td>
-                                        @php $var = $row['taux'][$mo]; @endphp
-                                        <td class="text-center {{ $ratesClass($var) }}"
-                                            style="border-right: 1px solid #000;">{{ $fmtPercent($var) }}</td>
-                                    @endfor
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div class="card mb-5">
-            <div class="card-body">
-                <h3 class="mb-3 text-success">Synthese du suivi des variations</h3>
-                <div class="table-responsive">
-                    <table class="table table-bordered table-sm table-exec" style="min-width:1500px;">
-                        <!-- reserve explicitement une largeur pour la colonne Libellés -->
-                        <colgroup>
-                            <col /> <!-- colonne 1 : placeholder (si tu as une colonne code avant libellé) -->
-                            <col style="width:420px" /> <!-- colonne Libellés -->
-                            @for ($i = 1; $i <= 12; $i++)
-                                <col /> <!-- colonnes mois (laissent le navigateur distribuer la largeur restante) -->
-                            @endfor
-                        </colgroup>
-
-                        <thead class="table-light text-center align-middle">
-                            <tr>
-                                <th style="width:100px">Code</th>
-                                <th class="libelle-col" style="min-width: 300px">Libellés</th>
-                                @foreach ($monthsLabels as $m)
-                                    <th colspan="3"
-                                        style="background: rgba(243, 144, 83, 0.71); border-right: 1px solid #000; min-width: 130px">
-                                        {{ $m }}</th>
-                                @endforeach
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            @foreach ($rows as $row)
-                                {{-- ligne d'en-tête pour code + libellé --}}
-                                <tr>
-                                    <td class="align-middle text-center"><strong>{{ $row['code'] }}</strong></td>
-                                    <td class="libelle-col">
-                                        <strong>{{ $row['libelle'] }}</strong>
-                                    </td>
-
-                                    @for ($mo = 1; $mo <= 12; $mo++)
-                                        @php $r = $row['taux'][$mo]; @endphp
-                                        <td colspan="3" class="text-center {{ $rateClass($r) }}">{{ $fmtPercent($r) }}
-                                        </td>
-                                    @endfor
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div class="card mb-5">
-            <div class="card-body">
-                <h3 class="mb-3 text-success">Echelle d'analyse du taux d'exécution</h3>
-                <table class="table table-bordered table-sm table-exec mt-4" style="max-width:1000px;">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Budget bien utilisé</th>
-                            <th>À surveiller</th>
-                            <th>Analyse urgente nécessaire</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>≥ 95%</td>
-                            <td class="bg-success"></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>85% - 94.99%</td>
-                            <td></td>
-                            <td class="bg-warning"></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>&lt; 85%</td>
-                            <td></td>
-                            <td></td>
-                            <td class="bg-danger"></td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                {{-- Légende / Echelle --}}
-                <div class="mt-4">
-                    <h5 class="mb-3 mt-5">Légende des taux d'exécution :</h5>
-                    <ul class="list-inline">
-                        <li class="list-inline-item me-4">
-                            <span class="badge bg-success text-white">≥ 95%</span> : Excellente exécution
-                        </li>
-                        <li class="list-inline-item me-4">
-                            <span class="badge bg-warning text-dark">85% - 94.99%</span> : Exécution moyenne
-                        </li>
-                        <li class="list-inline-item me-4">
-                            <span class="badge bg-danger text-white">&lt; 85%</span> : Faible exécution
-                        </li>
-                        <li class="list-inline-item me-4">
-                            <span class="badge bg-light text-muted">N/A</span> : Données non disponibles
-                        </li>
-                    </ul>
-                </div>
-            </div>
+            <span class="hero-badge"><i class="fas fa-calendar-alt"></i> {{ $year }}</span>
         </div>
     </div>
+
+    {{-- ── Toolbar : filtre + actions ───────────────── --}}
+    <div class="toolbar-card">
+        {{-- Filtre année --}}
+        <span class="toolbar-label"><i class="fas fa-sliders-h me-1"></i>Filtrer</span>
+        <form class="d-flex align-items-center gap-2 flex-grow-1" method="GET" action="#">
+            <select name="year" class="form-select">
+                @for ($y = date('Y') - 3; $y <= date('Y') + 3; $y++)
+                    <option value="{{ $y }}" {{ $y == $year ? 'selected' : '' }}>{{ $y }}</option>
+                @endfor
+            </select>
+            <button type="submit" class="btn-primary-custom">
+                <i class="fas fa-filter"></i> Appliquer
+            </button>
+        </form>
+
+        {{-- Actions --}}
+        <div class="d-flex align-items-center gap-2 ms-auto flex-wrap">
+            <a href="{{ route('tresorerie.export_excel') }}?year={{ $year }}" class="btn-export">
+                <i class="fas fa-file-excel"></i> Exporter Excel
+            </a>
+            <a href="{{ route('tresorerie.print_situation_financiere') }}?year={{ $year }}" target="_blank" class="btn-print">
+                <i class="fas fa-print"></i> Imprimer
+            </a>
+        </div>
+    </div>
+
+    @php
+        $fmtAmount  = fn($v) => ($v !== null && $v != 0.0) ? number_format((float) $v, 0, ',', ' ') : '';
+        $fmtPercent = fn($v) => $v === null ? '' : number_format($v * 100, 1) . '%';
+        $fmtEcart   = function($v) {
+            if ($v === null || $v == 0) return '';
+            return ($v > 0 ? '+' : '') . number_format((float) $v, 0, ',', ' ');
+        };
+        $ecartClass = fn($v) => ($v === null || $v == 0) ? '' : ($v >= 0 ? 'ecart-pos' : 'ecart-neg');
+    @endphp
+
+    {{-- ── Table card ──────────────────────────────────── --}}
+    <div class="table-card">
+        <div class="table-card-header">
+            <div class="tch-icon"><i class="fas fa-table"></i></div>
+            <div>
+                <p class="tch-title">État du suivi de taux d'exécution</p>
+                <p class="tch-sub mb-0">Prévision · Réalisation · Écart — par mois</p>
+            </div>
+        </div>
+
+        <div class="table-responsive" style="max-height: 70vh; overflow-y: auto;">
+            <table class="table table-bordered table-sm table-exec mb-0" style="min-width:2600px;">
+                <colgroup>
+                    <col style="width:80px" />
+                    <col style="width:380px" />
+                    @for ($i = 1; $i <= 12; $i++)
+                        <col /><col /><col />
+                    @endfor
+                </colgroup>
+
+                <thead class="text-center align-middle">
+                    <tr>
+                        <th rowspan="2">Code</th>
+                        <th rowspan="2" style="text-align:left; padding-left:.75rem;">Libellés</th>
+                        @foreach ($monthsLabels as $m)
+                            <th colspan="3" class="month-head">{{ $m }}</th>
+                        @endforeach
+                    </tr>
+                    <tr>
+                        @foreach ($monthsLabels as $m)
+                            <th>Prévision</th>
+                            <th>Réalisation</th>
+                            <th style="border-right: 2px solid #cbd5e1;">Écart</th>
+                        @endforeach
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach ($rows as $row)
+                        <tr>
+                            <td class="col-code">{{ $row['code'] }}</td>
+                            <td class="col-libelle" style="padding-left:.75rem;">{{ $row['libelle'] }}</td>
+
+                            @for ($mo = 1; $mo <= 12; $mo++)
+                                @php
+                                    $prev  = $row['preMonths'][$mo]  ?? null;
+                                    $real  = $row['realMonths'][$mo] ?? null;
+                                    $ecar  = $row['ecarts'][$mo]     ?? null;
+                                @endphp
+                                <td class="text-end prev">{{ $fmtAmount($prev) }}</td>
+                                <td class="text-end real">{{ $fmtAmount($real) }}</td>
+                                <td class="text-end border-month {{ $ecartClass($ecar) }}">
+                                    <strong>{{ $fmtEcart($ecar) }}</strong>
+                                </td>
+                            @endfor
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
 @endsection

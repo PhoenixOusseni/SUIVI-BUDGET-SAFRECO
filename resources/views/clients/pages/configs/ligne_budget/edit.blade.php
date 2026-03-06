@@ -1,107 +1,112 @@
 @extends('clients.layouts.master')
 
 @section('content')
-    <div class="container">
-        <h4 class="page-title">GESTION DES LIGNES BUDGETAIRES</h4>
-        <div class="card">
-            <div class="card-body">
-                {{-- Include the menu configuration partial --}}
-                @include('clients.pages.configs.menu_config')
+<div class="container-fluid px-3 pb-4">
 
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="alert alert-info" role="alert">
-                            <h4 class="alert-heading">Modification de ligne budgetaire "{{ $findLigneBudget->code }}"</h4>
-                            <hr>
+    <div class="page-hero">
+        <div class="d-flex align-items-start justify-content-between flex-wrap gap-2">
+            <div>
+                <p class="hero-title"><i class="fas fa-list-alt me-2"></i>Modifier une Ligne Budgétaire</p>
+                <p class="hero-sub">Modification de : <strong>{{ $findLigneBudget->code }} — {{ $findLigneBudget->intitule }}</strong></p>
+            </div>
+            <a href="{{ route('gestion_ligne_budgets.index') }}" class="hero-badge">
+                <i class="fas fa-arrow-left"></i> Retour
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        {{-- Formulaire --}}
+        <div class="col-lg-4">
+            <div class="form-card">
+                <div class="form-card-header">
+                    <div class="fch-icon"><i class="fas fa-edit"></i></div>
+                    <p class="fch-title">Modifier — {{ $findLigneBudget->code }}</p>
+                </div>
+                <div class="form-card-body">
+                    <form action="{{ route('gestion_ligne_budgets.update', $findLigneBudget->id) }}" method="POST">
+                        @csrf @method('PUT')
+                        <div class="mb-3">
+                            <label for="code" class="form-label">Code</label>
+                            <input type="text" class="form-control" id="code" value="{{ $findLigneBudget->code }}" disabled>
                         </div>
+                        <div class="mb-3">
+                            <label for="code_budget_id" class="form-label">Code budgétaire <span class="text-danger">*</span></label>
+                            <select class="form-select" id="code_budget_id" name="code_budget_id" required>
+                                <option value="" selected disabled>-- Sélectionnez un code budgétaire --</option>
+                                @foreach ($codeBudgets as $codeBudget)
+                                    <option value="{{ $codeBudget->id }}" {{ $findLigneBudget->code_budget_id == $codeBudget->id ? 'selected' : '' }}>
+                                        {{ $codeBudget->code }} - {{ $codeBudget->intitule }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="intitule" class="form-label">Intitulé <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="intitule" name="intitule" value="{{ $findLigneBudget->intitule }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="montant" class="form-label">Montant</label>
+                            <input type="number" step="0.01" class="form-control" id="montant" name="montant" value="{{ $findLigneBudget->montant }}">
+                        </div>
+                        <div class="mb-4">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" id="description" name="description" rows="3">{{ $findLigneBudget->description }}</textarea>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn-primary-custom"><i class="fas fa-save"></i> Mettre à jour</button>
+                            <a href="{{ route('gestion_ligne_budgets.index') }}" class="btn-secondary-custom"><i class="fas fa-times"></i> Annuler</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {{-- Liste --}}
+        <div class="col-lg-8">
+            <div class="table-card">
+                <div class="table-card-header">
+                    <div class="tch-icon"><i class="fas fa-list-alt"></i></div>
+                    <div>
+                        <p class="tch-title">Liste des lignes budgétaires</p>
+                        <p class="tch-sub mb-0">{{ count($ligneBudgets) }} ligne(s)</p>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-8">
-                        <h5 class="mb-3">Liste des Lignes Budgetaires</h5>
-                        <table id="datatablesSimple" class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Code</th>
-                                    <th>Code Budgetaire</th>
-                                    <th>Intitule</th>
-                                    <th>Montant</th>
-                                    <th>Description</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($ligneBudgets as $ligneBudget)
-                                    <tr>
-                                        <td>{{ $ligneBudget->code }}</td>
-                                        <td>{{ $ligneBudget->codeBudget->intitule }}</td>
-                                        <td>{{ $ligneBudget->intitule }}</td>
-                                        <td>{{ number_format($ligneBudget->montant, 0, ',', ' ') }}</td>
-                                        <td>{{ $ligneBudget->description }}</td>
-                                        <td>
-                                            <a href="{{ route('gestion_ligne_budgets.edit', $ligneBudget->id) }}"
-                                                class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
-                                            <form action="{{ route('gestion_ligne_budgets.destroy', $ligneBudget->id) }}"
-                                                method="POST" style="display:inline;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger"
-                                                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette ligne budgetaire ?')"><i class="fas fa-trash"></i></button>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-sm table-std mb-0" id="datatablesSimple">
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Code Budgétaire</th>
+                                <th>Intitulé</th>
+                                <th>Montant</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($ligneBudgets as $ligneBudget)
+                                <tr class="{{ $ligneBudget->id === $findLigneBudget->id ? 'table-active' : '' }}">
+                                    <td><span class="status-badge blue">{{ $ligneBudget->code }}</span></td>
+                                    <td>{{ $ligneBudget->codeBudget->intitule }}</td>
+                                    <td style="font-weight:600;">{{ $ligneBudget->intitule }}</td>
+                                    <td>{{ number_format($ligneBudget->montant, 0, ',', ' ') }}</td>
+                                    <td>
+                                        <div class="action-group">
+                                            <a href="{{ route('gestion_ligne_budgets.edit', $ligneBudget->id) }}" class="btn-warning-custom"><i class="fas fa-edit"></i></a>
+                                            <form action="{{ route('gestion_ligne_budgets.destroy', $ligneBudget->id) }}" method="POST" style="display:inline-block;">
+                                                @csrf @method('DELETE')
+                                                <button type="submit" class="btn-danger-custom" onclick="return confirm('Supprimer cette ligne budgétaire ?')"><i class="fas fa-trash-alt"></i></button>
                                             </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="col-md-4">
-                        <h5 class="mb-3">Ajout de Ligne Budgetaire</h5>
-                        <form action="{{ route('gestion_ligne_budgets.update', $findLigneBudget->id) }}" method="POST">
-                            @csrf
-                            @method('PUT')
-                            <div class="mb-3">
-                                <label for="code" class="small">Code</label>
-                                <input type="text" class="form-control" id="code"
-                                    value="{{ $findLigneBudget->code }}" disabled>
-                            </div>
-                            <div class="mb-3">
-                                <label for="code_budget_id" class="small">Code budgetaire</label>
-                                <select class="form-select" id="code_budget_id" name="code_budget_id">
-                                    <option value="" selected disabled>-- Sélectionnez un code budgetaire --</option>
-                                    @foreach ($codeBudgets as $codeBudget)
-                                        <option value="{{ $codeBudget->id }}"
-                                            {{ $findLigneBudget->code_budget_id == $codeBudget->id ? 'selected' : '' }}>
-                                            {{ $codeBudget->code }} - {{ $codeBudget->intitule }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="intitule" class="small">Intitule</label>
-                                <input type="text" class="form-control" id="intitule" name="intitule"
-                                    value="{{ $findLigneBudget->intitule }}">
-                            </div>
-                            <div class="mb-3">
-                                <label for="montant" class="small">Montant</label>
-                                <input type="number" step="0.01" class="form-control" id="montant" name="montant"
-                                    value="{{ $findLigneBudget->montant }}">
-                            </div>
-                            <div class="mb-3">
-                                <label for="description" class="small">Description</label>
-                                <textarea class="form-control" id="description" name="description" rows="3">{{ $findLigneBudget->description }}</textarea>
-                            </div>
-                            <div class="mb-3">
-                                <button type="submit" class="btn btn-primary">
-                                    <i data-feather="edit"></i> &thinsp;&thinsp; Modifier
-                                </button>
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-                                    <i data-feather="x-circle"></i> &thinsp;&thinsp; Fermer
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
+
+</div>
 @endsection

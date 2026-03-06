@@ -236,11 +236,11 @@
                             <i class="bi bi-table"></i> Suivi budgetaire
                         </a>
                         <a class="hdr-dropdown-item" href="{{ route('budget.execution') }}">
-                            <i class="bi bi-percent"></i> Taux d'execution
+                            <i class="bi bi-percent"></i> Suivi d'execution
                         </a>
-                        <a class="hdr-dropdown-item" href="{{ route('budget.consommation') }}">
+                        {{-- <a class="hdr-dropdown-item" href="{{ route('budget.consommation') }}">
                             <i class="bi bi-graph-up"></i> Consommation subventions
-                        </a>
+                        </a> --}}
                     </ul>
                 </li>
 
@@ -253,12 +253,12 @@
                     </a>
                     <ul class="hdr-dropdown">
                         <div class="hdr-dropdown-header">Tresorerie</div>
-                        <a class="hdr-dropdown-item" href="{{ route('tresorerie.depenses_rations') }}">
+                        {{-- <a class="hdr-dropdown-item" href="{{ route('tresorerie.depenses_rations') }}">
                             <i class="bi bi-receipt"></i> Depenses en rations
                         </a>
                         <a class="hdr-dropdown-item" href="{{ route('tresorerie.situation_financiere') }}">
                             <i class="bi bi-wallet2"></i> Situation financiere
-                        </a>
+                        </a> --}}
                         <div class="hdr-dropdown-sep"></div>
                         <a class="hdr-dropdown-item" href="{{ route('gestion_operations.index') }}">
                             <i class="bi bi-arrow-left-right"></i> Saisie des operations
@@ -278,25 +278,25 @@
                         <a class="hdr-dropdown-item" href="{{ route('gestion_taches.index') }}">
                             <i class="bi bi-kanban"></i> Taches projet
                         </a>
-                        <a class="hdr-dropdown-item" href="{{ route('engagement.suivi_fournisseurs') }}">
+                        {{-- <a class="hdr-dropdown-item" href="{{ route('engagement.suivi_fournisseurs') }}">
                             <i class="bi bi-truck"></i> Suivi fournisseurs
                         </a>
                         <a class="hdr-dropdown-item" href="{{ route('engagement.suivi_audits') }}">
                             <i class="bi bi-clipboard-check"></i> Audits traites
-                        </a>
-                    </ul>
+                        </a> --}}
+                    </ul> 
                 </li>
 
                 <li class="hdr-item">
-                    <a class="hdr-link {{ request()->routeIs('data.prevision') ? 'active' : '' }}"
-                       href="{{ route('data.prevision') }}">
+                    <a class="hdr-link {{ request()->routeIs('gestion_previsions.*') || request()->routeIs('data.prevision*') ? 'active' : '' }}"
+                       href="{{ route('gestion_previsions.index') }}">
                         <i class="bi bi-bullseye hdr-link-icon"></i> Previsions
                     </a>
                 </li>
 
                 <li class="hdr-item">
-                    <a class="hdr-link {{ request()->routeIs('data.realisation') ? 'active' : '' }}"
-                       href="{{ route('data.realisation') }}">
+                    <a class="hdr-link {{ request()->routeIs('gestion_realisations.*') || request()->routeIs('data.realisation*') ? 'active' : '' }}"
+                       href="{{ route('gestion_realisations.index') }}">
                         <i class="bi bi-check2-circle hdr-link-icon"></i> Realisations
                     </a>
                 </li>

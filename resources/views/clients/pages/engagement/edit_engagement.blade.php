@@ -1,80 +1,79 @@
 @extends('clients.layouts.master')
 
 @section('content')
-    <div class="container">
-        <div class="container mt-3 text-center">
-            <h1 class="mb-2 page-title">GESTION DES ENGAGEMENTS</h1>
-            <p>
-                Bienvenue dans la section de gestion des engagements. Ici, vous pouvez gérer les engagements financiers,
-                suivre les dépôts et assurer un suivi efficace des pièces jointes.
-            </p>
-        </div>
+<div class="container-fluid px-3 pb-4">
 
-        <div class="row mb-5">
-            <div class="col-md-12 mb-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title text-success mb-3">Modification de l'engagement {{ $engagementFind->code }}</h5>
-                        <form method="POST" action="{{ route('engagement.update_engagement', $engagementFind->id) }}" enctype="multipart/form-data">
-                    @csrf
-                    <div class="modal-body">
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="code" class="small">Code</label>
-                                <input type="text" class="form-control" id="code" value="{{ $engagementFind->code }}" disabled>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="date_depot" class="small">Date de dépôt <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control" id="date_depot" name="date_depot" value="{{ $engagementFind->date_depot }}" required>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="montant" class="small">Montant <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control" id="montant" name="montant" placeholder="Montant de l'engagement" value="{{ $engagementFind->montant }}" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="fournisseur_id" class="small">Fournisseur <span class="text-danger">*</span></label>
-                                <select class="form-select" id="fournisseur_id" name="fournisseur_id" required>
-                                    <option value="">-- Sélectionner un fournisseur --</option>
-                                    @foreach ($fournisseurs as $fournisseur)
-                                        <option value="{{ $fournisseur->id }}" {{ $engagementFind->fournisseur_id == $fournisseur->id ? 'selected' : '' }}>{{ $fournisseur->nom_fournisseur }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <label for="j_1" class="small">30J</label>
-                                <input type="text" class="form-control" id="j_1" name="j_1" placeholder="30J" value="{{ $engagementFind->j_1 }}" disabled>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="j_2" class="small">45J</label>
-                                <input type="text" class="form-control" id="j_2" name="j_2" placeholder="45J" value="{{ $engagementFind->j_2 }}" disabled>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="j_3" class="small">+45J</label>
-                                <input type="text" class="form-control" id="j_3" name="j_3" placeholder="+45J" value="{{ $engagementFind->j_3 }}" disabled>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="piece_joint" class="small">Pièce jointe</label>
-                            <input type="file" class="form-control" id="piece_joint" name="piece_joint" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
-                            <small class="text-muted">Formats acceptés: PDF, DOC, DOCX, JPG, PNG</small>
-                        </div>
-                    </div>
-                    <div class="mb-3 text-start">
-                        <button type="submit" class="btn btn-success">
-                            <i class="fas fa-edit"></i>&nbsp; Modifier l'engagement
-                        </button>
-                    </div>
-                </form>
-                    </div>
-                </div>
+    <div class="page-hero">
+        <div class="d-flex align-items-start justify-content-between flex-wrap gap-2">
+            <div>
+                <p class="hero-title"><i class="fas fa-handshake me-2"></i>Modifier un Engagement</p>
+                <p class="hero-sub">Modification de : <strong>{{ $engagementFind->code }}</strong></p>
             </div>
+            <a href="{{ route('engagement.gestion_engagements') }}" class="hero-badge">
+                <i class="fas fa-arrow-left"></i> Retour
+            </a>
         </div>
     </div>
+
+    <div class="form-card" style="max-width:800px;">
+        <div class="form-card-header">
+            <div class="fch-icon"><i class="fas fa-edit"></i></div>
+            <p class="fch-title">Modifier — {{ $engagementFind->code }}</p>
+        </div>
+        <div class="form-card-body">
+            <form method="POST" action="{{ route('engagement.update_engagement', $engagementFind->id) }}" enctype="multipart/form-data">
+                @csrf @method('PUT')
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Code</label>
+                        <input type="text" class="form-control" value="{{ $engagementFind->code }}" disabled>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="date_depot" class="form-label">Date de dépôt <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" id="date_depot" name="date_depot" value="{{ $engagementFind->date_depot }}" required>
+                    </div>
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label for="montant" class="form-label">Montant <span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" id="montant" name="montant" value="{{ $engagementFind->montant }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="fournisseur_id" class="form-label">Fournisseur <span class="text-danger">*</span></label>
+                        <select class="form-select" id="fournisseur_id" name="fournisseur_id" required>
+                            <option value="">-- Sélectionner un fournisseur --</option>
+                            @foreach ($fournisseurs as $fournisseur)
+                                <option value="{{ $fournisseur->id }}" {{ $engagementFind->fournisseur_id == $fournisseur->id ? 'selected' : '' }}>{{ $fournisseur->nom_fournisseur }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">30J</label>
+                        <input type="text" class="form-control" name="j_1" value="{{ $engagementFind->j_1 }}" disabled>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">45J</label>
+                        <input type="text" class="form-control" name="j_2" value="{{ $engagementFind->j_2 }}" disabled>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">+45J</label>
+                        <input type="text" class="form-control" name="j_3" value="{{ $engagementFind->j_3 }}" disabled>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label for="piece_joint" class="form-label">Pièce jointe</label>
+                    <input type="file" class="form-control" id="piece_joint" name="piece_joint" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+                    <small class="text-muted">Formats : PDF, DOC, DOCX, JPG, PNG</small>
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn-primary-custom"><i class="fas fa-save"></i> Mettre à jour</button>
+                    <a href="{{ route('engagement.gestion_engagements') }}" class="btn-secondary-custom"><i class="fas fa-times"></i> Annuler</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
 @endsection
