@@ -64,7 +64,7 @@
                         <p class="tch-sub mb-0">{{ count($ligneBudgets) }} ligne(s)</p>
                     </div>
                 </div>
-                <div class="table-responsive">
+                <div class="table-responsive p-3">
                     <table class="table table-bordered table-sm table-std mb-0" id="datatablesSimple">
                         <thead>
                             <tr>

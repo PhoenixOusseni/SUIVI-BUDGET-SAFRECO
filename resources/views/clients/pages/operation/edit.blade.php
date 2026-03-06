@@ -9,7 +9,7 @@
                 <p class="hero-title"><i class="fas fa-exchange-alt me-2"></i>Modifier une Opération Budgétaire</p>
                 <p class="hero-sub">Modification de l'opération #{{ $operationFind->id }}</p>
             </div>
-            <a href="{{ route('gestion_operations.index') }}" class="hero-badge">
+            <a href="{{ route('gestion_operations.index') }}" class="hero-badge text-white">
                 <i class="fas fa-arrow-left"></i> Retour
             </a>
         </div>
@@ -144,7 +144,7 @@
                         <p class="tch-sub mb-0">{{ count($operations) }} opération(s)</p>
                     </div>
                 </div>
-                <div class="table-responsive">
+                <div class="table-responsive p-3">
                     <table class="table table-bordered table-sm table-std mb-0" id="datatablesSimple">
                         <thead>
                             <tr>

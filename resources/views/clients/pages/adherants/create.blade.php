@@ -9,7 +9,7 @@
                 <p class="hero-title"><i class="fas fa-user-plus me-2"></i>Nouvel Adhérant</p>
                 <p class="hero-sub">Créer un nouvel adhérant dans le système</p>
             </div>
-            <a href="{{ route('gestion_adherants.index') }}" class="hero-badge">
+            <a href="{{ route('gestion_adherants.index') }}" class="hero-badge text-decoration-none text-white">
                 <i class="fas fa-arrow-left"></i> Retour à la liste
             </a>
         </div>
@@ -47,7 +47,6 @@
                 </div>
                 <div class="mt-4 d-flex gap-2">
                     <button type="submit" class="btn-primary-custom"><i class="fas fa-save"></i> Enregistrer</button>
-                    <a href="{{ route('gestion_adherants.index') }}" class="btn-secondary-custom"><i class="fas fa-times"></i> Annuler</a>
                 </div>
             </form>
         </div>

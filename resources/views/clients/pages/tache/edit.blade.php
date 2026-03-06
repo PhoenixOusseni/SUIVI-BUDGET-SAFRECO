@@ -9,7 +9,7 @@
                 <p class="hero-title"><i class="fas fa-tasks me-2"></i>Modifier une Tâche</p>
                 <p class="hero-sub">Modification de : <strong>{{ $tacheFind->libelle }}</strong></p>
             </div>
-            <a href="{{ route('gestion_taches.index') }}" class="hero-badge">
+            <a href="{{ route('gestion_taches.index') }}" class="hero-badge text-decoration-none text-white">
                 <i class="fas fa-arrow-left"></i> Retour
             </a>
         </div>
@@ -60,7 +60,6 @@
                         </div>
                         <div class="d-flex gap-2">
                             <button type="submit" class="btn-primary-custom"><i class="fas fa-save"></i> Mettre à jour</button>
-                            <a href="{{ route('gestion_taches.index') }}" class="btn-secondary-custom"><i class="fas fa-times"></i> Annuler</a>
                         </div>
                     </form>
                 </div>
@@ -77,7 +76,7 @@
                         <p class="tch-sub mb-0">{{ count($taches) }} tâche(s)</p>
                     </div>
                 </div>
-                <div class="table-responsive">
+                <div class="table-responsive p-3">
                     <table class="table table-bordered table-sm table-std mb-0" id="datatablesSimple">
                         <thead>
                             <tr><th>Code</th><th>Date début</th><th>Libellé</th><th>Taux</th><th>Actions</th></tr>
@@ -107,6 +106,5 @@
             </div>
         </div>
     </div>
-
 </div>
 @endsection

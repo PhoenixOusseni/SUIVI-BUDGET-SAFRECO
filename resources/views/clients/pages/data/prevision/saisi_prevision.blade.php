@@ -9,7 +9,7 @@
                 <p class="hero-title"><i class="fas fa-chart-bar me-2"></i>Saisie des Prévisions</p>
                 <p class="hero-sub">Enregistrez les montants prévisionnels par mois</p>
             </div>
-            <a href="{{ route('gestion_previsions.index') }}" class="hero-badge">
+            <a href="{{ route('gestion_previsions.index') }}" class="hero-badge text-decoration-none text-white">
                 <i class="fas fa-list"></i> Liste des prévisions
             </a>
         </div>
@@ -76,7 +76,6 @@
 
                 <div class="d-flex gap-2">
                     <button type="submit" class="btn-primary-custom"><i class="fas fa-save"></i> Enregistrer la prévision</button>
-                    <a href="{{ route('gestion_previsions.index') }}" class="btn-secondary-custom"><i class="fas fa-times"></i> Annuler</a>
                 </div>
             </form>
         </div>

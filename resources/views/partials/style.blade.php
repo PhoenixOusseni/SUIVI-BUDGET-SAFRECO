@@ -98,6 +98,7 @@
         height: 180px;
         border-radius: 50%;
         background: rgba(255, 255, 255, .06);
+        pointer-events: none;
     }
 
     .page-hero .hero-title {

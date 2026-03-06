@@ -20,7 +20,7 @@
         <div class="modal-dialog">
             <div class="modal-content" style="border-radius:14px; border:none; box-shadow:0 8px 32px rgba(0,61,130,.15);">
                 <div class="modal-header modal-header-blue">
-                    <h5 class="modal-title" id="addRubriqueModalLabel"><i class="fas fa-plus me-2"></i>Nouvelle rubrique</h5>
+                    <h5 class="modal-title text-white" id="addRubriqueModalLabel"><i class="fas fa-plus me-2" class="text-white"></i>Nouvelle rubrique</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-4">
@@ -40,7 +40,6 @@
                         </div>
                         <div class="d-flex gap-2">
                             <button type="submit" class="btn-primary-custom"><i class="fas fa-save"></i> Enregistrer</button>
-                            <button type="button" class="btn-secondary-custom" data-bs-dismiss="modal"><i class="fas fa-times"></i> Annuler</button>
                         </div>
                     </form>
                 </div>
@@ -57,7 +56,7 @@
                 <p class="tch-sub mb-0">{{ count($rubriques) }} rubrique(s)</p>
             </div>
         </div>
-        <div class="table-responsive">
+        <div class="table-responsive p-3">
             <table class="table table-bordered table-sm table-std mb-0" id="datatablesSimple">
                 <thead>
                     <tr>
@@ -88,6 +87,5 @@
             </table>
         </div>
     </div>
-
 </div>
 @endsection

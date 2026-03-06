@@ -9,7 +9,7 @@
                 <p class="hero-title"><i class="fas fa-list-alt me-2"></i>Modifier une Ligne Budgétaire</p>
                 <p class="hero-sub">Modification de : <strong>{{ $findLigneBudget->code }} — {{ $findLigneBudget->intitule }}</strong></p>
             </div>
-            <a href="{{ route('gestion_ligne_budgets.index') }}" class="hero-badge">
+            <a href="{{ route('gestion_ligne_budgets.index') }}" class="hero-badge text-decoration-none text-white">
                 <i class="fas fa-arrow-left"></i> Retour
             </a>
         </div>
@@ -55,7 +55,6 @@
                         </div>
                         <div class="d-flex gap-2">
                             <button type="submit" class="btn-primary-custom"><i class="fas fa-save"></i> Mettre à jour</button>
-                            <a href="{{ route('gestion_ligne_budgets.index') }}" class="btn-secondary-custom"><i class="fas fa-times"></i> Annuler</a>
                         </div>
                     </form>
                 </div>
@@ -72,7 +71,7 @@
                         <p class="tch-sub mb-0">{{ count($ligneBudgets) }} ligne(s)</p>
                     </div>
                 </div>
-                <div class="table-responsive">
+                <div class="table-responsive p-3">
                     <table class="table table-bordered table-sm table-std mb-0" id="datatablesSimple">
                         <thead>
                             <tr>
@@ -107,6 +106,5 @@
             </div>
         </div>
     </div>
-
 </div>
 @endsection

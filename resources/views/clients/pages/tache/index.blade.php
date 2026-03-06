@@ -71,7 +71,7 @@
                         <p class="tch-sub mb-0">{{ count($taches) }} tâche(s)</p>
                     </div>
                 </div>
-                <div class="table-responsive">
+                <div class="table-responsive p-3">
                     <table class="table table-bordered table-sm table-std mb-0" id="datatablesSimple">
                         <thead>
                             <tr><th>Code</th><th>Date début</th><th>Libellé</th><th>Taux</th><th>Actions</th></tr>
@@ -104,6 +104,5 @@
             </div>
         </div>
     </div>
-
 </div>
 @endsection
