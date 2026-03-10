@@ -238,9 +238,9 @@
                         <a class="hdr-dropdown-item" href="{{ route('budget.execution') }}">
                             <i class="bi bi-percent"></i> Suivi d'execution
                         </a>
-                        {{-- <a class="hdr-dropdown-item" href="{{ route('budget.consommation') }}">
-                            <i class="bi bi-graph-up"></i> Consommation subventions
-                        </a> --}}
+                        <a class="hdr-dropdown-item" href="{{ route('budget.sous_budget') }}">
+                            <i class="bi bi-graph-up"></i> Sous budget initial
+                        </a>
                     </ul>
                 </li>
 
@@ -284,7 +284,7 @@
                         <a class="hdr-dropdown-item" href="{{ route('engagement.suivi_audits') }}">
                             <i class="bi bi-clipboard-check"></i> Audits traites
                         </a> --}}
-                    </ul> 
+                    </ul>
                 </li>
 
                 <li class="hdr-item">

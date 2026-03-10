@@ -60,35 +60,30 @@
         @endphp
         <div class="table-responsive" style="max-height:70vh; overflow:auto;">
             <table class="table table-bordered table-sm table-exec align-middle mb-0" style="min-width:1600px;">
-                <thead style="position:sticky; top:0; z-index:5;">
+                <thead>
                     <tr>
-                        <th style="width:140px;">CODE</th>
-                        <th style="min-width:260px;">Libellés</th>
+                        <th style="width:140px; position:sticky; top:0; z-index:3;">CODE</th>
+                        <th style="min-width:260px; position:sticky; top:0; z-index:3;">Libellés</th>
                         @foreach ($months as $m)
-                            <th class="text-end" style="width:120px;">{{ $m }}</th>
+                            <th class="text-end" style="width:120px; position:sticky; top:0; z-index:3;">{{ $m }}</th>
                         @endforeach
-                        <th class="text-center" style="width:140px; background:rgba(241,180,110,.5);">Total</th>
-                        <th style="width:90px;">Actions</th>
+                        <th class="text-center" style="width:140px; background:rgba(241,180,110,.5); position:sticky; top:0; z-index:3;">Total</th>
+                        <th style="width:90px; position:sticky; top:0; z-index:3;">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($groupedRealisations as $ligneId => $realis)
+                    @forelse($groupedRealisations as $entry)
                         @php
-                            $realisation = $realis->first();
-                            $ligne = $lignesMap->get($ligneId);
-                            $rowMonths = array_fill(1, 12, 0.0);
-                            if ($realisation && $realisation->relationLoaded('months')) {
-                                foreach ($realisation->months as $pm) { $rowMonths[(int)$pm->month] = (float)$pm->amount; }
-                            } elseif ($realisation) {
-                                foreach ($realisation->months()->get() as $pm) { $rowMonths[(int)$pm->month] = (float)$pm->amount; }
-                            }
-                            $rowTotal = array_sum($rowMonths);
+                            $realisation = $entry->realisation;
+                            $ligne       = $entry->ligneBudget;
+                            $rowMonths   = $entry->mergedMonths;
+                            $rowTotal    = array_sum($rowMonths);
                             foreach ($rowMonths as $k => $v) { $colTotals[$k] += $v; }
                             $grandTotal += $rowTotal;
                         @endphp
                         <tr>
-                            <td><span class="status-badge blue">{{ $ligne ? $ligne->code : '—' }}</span></td>
-                            <td>{{ $ligne ? ($ligne->intitule ?? ($ligne->name ?? '')) : ($realisation->description ?? '') }}</td>
+                            <td><span class="status-badge blue">{{ $ligne ? ($ligne->code ?? '—') : ($realisation->ligne_budget_id ? '#'.$realisation->ligne_budget_id : '—') }}</span></td>
+                            <td>{{ $ligne ? ($ligne->intitule ?? ($ligne->name ?? '')) : ($realisation->description ?? 'Ligne inconnue') }}</td>
                             @foreach ($rowMonths as $amt)
                                 <td class="text-end">{{ $amt ? number_format($amt, 0, ',', ' ') : '' }}</td>
                             @endforeach

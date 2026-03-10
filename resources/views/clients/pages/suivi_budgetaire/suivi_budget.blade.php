@@ -11,7 +11,7 @@
             </div>
             <div class="d-flex gap-2 flex-wrap align-items-center">
                 <form class="d-flex gap-2 align-items-center" method="GET" action="#">
-                    <select name="year" class="form-select" style="width:auto;">
+                    <select name="year" class="form-select" style="width: 150px;">
                         @for ($y = date('Y') - 3; $y <= date('Y') + 3; $y++)
                             <option value="{{ $y }}" {{ $y == $year ? 'selected' : '' }}>{{ $y }}</option>
                         @endfor

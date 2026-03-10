@@ -17,33 +17,45 @@ class PrevisionController extends Controller
      */
     public function index(Request $request)
     {
-        // année filtrée (default = current year)
-        $year = (int) $request->input('year', date('Y'));
+        $year          = (int) $request->input('year', date('Y'));
+        $ligneBudgetId = $request->input('ligne_budget_id');
 
-        // Récupère toutes les prévisions pour l'année, avec leurs mois et la ligne budgétaire associée
-        // Assure que la relation 'codeBudget' (ou 'ligneBudget') est définie sur Prevision
-        $previsions = Prevision::with(['months', 'ligneBudget']) // ou 'ligneBudget' suivant votre relation
-            ->where('year', $year)
-            ->get();
+        $query = Prevision::with(['months', 'ligneBudget'])
+            ->where('year', $year);
 
-        // Grouper par id de ligne budgétaire (nullable possible)
-        $grouped = $previsions->groupBy('ligne_budget_id'); // adapte le nom de la clé si c'est code_budget_id
+        // Filtre par ligne budgétaire si sélectionnée
+        if ($ligneBudgetId) {
+            $query->where('ligne_budget_id', $ligneBudgetId);
+        }
 
-        // Charger uniquement les lignes budgétaires qui ont une prévision (pour afficher code/intitulé)
-        $ligneIds = $grouped->keys()->filter()->all(); // filtre les clés nulles si existantes
-        $lignes = LigneBudget::whereIn('id', $ligneIds)->get()->keyBy('id');
+        $previsions = $query->orderBy('id')->get();
 
-        // Fournir list pour filtre dans la vue (toutes les lignes)
-        $allLignes = LigneBudget::orderBy('code')->get();
+        // Grouper par ligne_budget_id ; pour chaque groupe on fusionne les montants mensuels
+        // (cas rare de doublons : on additionne plutôt que de perdre des lignes)
+        $grouped = collect();
+        foreach ($previsions->groupBy('ligne_budget_id') as $ligneId => $group) {
+            $mergedMonths = array_fill(1, 12, 0.0);
+            foreach ($group as $prev) {
+                if ($prev->relationLoaded('months')) {
+                    foreach ($prev->months as $pm) {
+                        $mergedMonths[(int) $pm->month] += (float) $pm->amount;
+                    }
+                }
+            }
+            $first = $group->first();
+            $grouped->push((object)[
+                'prevision'    => $first,
+                'ligneBudget'  => $first->ligneBudget,   // relation déjà eager-loadée
+                'mergedMonths' => $mergedMonths,
+            ]);
+        }
 
-        $lignesBudgets = LigneBudget::orderBy('code')->get();
+        $lignesBudgets = LigneBudget::orderBy('intitule')->get();
 
         return view('clients.pages.data.prevision.index', [
             'groupedPrevisions' => $grouped,
-            'lignesMap' => $lignes,
-            'allLignes' => $allLignes,
-            'year' => $year,
-            'lignesBudgets' => $lignesBudgets,
+            'year'              => $year,
+            'lignesBudgets'     => $lignesBudgets,
         ]);
     }
 

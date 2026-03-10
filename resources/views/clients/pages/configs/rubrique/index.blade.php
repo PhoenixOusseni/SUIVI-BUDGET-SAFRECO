@@ -15,6 +15,8 @@
         </div>
     </div>
 
+    @include('clients.pages.configs.menu_config')
+
     {{-- Modal Ajout --}}
     <div class="modal fade" id="addRubriqueModal" tabindex="-1" aria-labelledby="addRubriqueModalLabel" aria-hidden="true">
         <div class="modal-dialog">

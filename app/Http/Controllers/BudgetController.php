@@ -371,6 +371,149 @@ class BudgetController extends Controller
     }
 
     /**
+     * Sous Budget Initial des Recettes & Dépenses (par semestre)
+     */
+    public function sousBudget(Request $request)
+    {
+        $year     = (int) $request->input('year', date('Y'));
+        $yearPrev = $year - 1;
+
+        // Charger les prévisions N et N-1 avec la chaîne complète rubrique
+        $previsions     = Prevision::with(['months', 'ligneBudget.codeBudget.rubrique'])
+                            ->where('year', $year)->get();
+        $previsionsPrev = Prevision::with(['months', 'ligneBudget.codeBudget.rubrique'])
+                            ->where('year', $yearPrev)->get();
+
+        // Construire un lookup N-1 : ligne_budget_id => total annuel
+        $prevN1 = [];
+        foreach ($previsionsPrev as $p) {
+            $total = 0.0;
+            foreach ($p->months as $m) {
+                $total += (float) $m->amount;
+            }
+            $id = $p->ligne_budget_id;
+            $prevN1[$id] = ($prevN1[$id] ?? 0.0) + $total;
+        }
+
+        $encaissements = [];
+        $decaissements = [];
+
+        // Helper : détermine si une ligne est encaissement ou décaissement
+        // Priorité 1 : rubrique de la ligne (via codeBudget.rubrique)
+        // Priorité 2 : code de la ligne budgétaire (données seedées A.1.x / A.2.x)
+        $classifyRow = function (LigneBudget $lb): string {
+            $cb  = $lb->codeBudget;
+            $rub = $cb ? $cb->rubrique : null;
+
+            if ($rub) {
+                $rubIntitule = mb_strtolower($rub->intitule ?? '');
+                $rubCode     = mb_strtoupper($rub->code ?? '');
+
+                // Correspondance par intitulé de rubrique
+                if (str_contains($rubIntitule, 'encaissement') || str_contains($rubIntitule, 'recette')) {
+                    return 'enc';
+                }
+                if (str_contains($rubIntitule, 'décaissement') || str_contains($rubIntitule, 'decaissement')
+                    || str_contains($rubIntitule, 'dépense') || str_contains($rubIntitule, 'depense')) {
+                    return 'dec';
+                }
+                // Correspondance par code de rubrique (A=encaissement, D=décaissement selon seeder)
+                if ($rubCode === 'A') return 'enc';
+                if ($rubCode === 'D') return 'dec';
+            }
+
+            // Fallback : code de la LigneBudget (données seedées)
+            $code = $lb->code ?? '';
+            if ($code && str_contains($code, 'A.1')) return 'enc';
+            if ($code && str_contains($code, 'A.2')) return 'dec';
+
+            return 'unknown';
+        };
+
+        foreach ($previsions as $prevision) {
+            $lb = $prevision->ligneBudget;
+            if (!$lb) continue;
+
+            $type = $classifyRow($lb);
+            if ($type === 'unknown') continue;
+
+            $code = $lb->code ?? '';
+
+            // Calcul des semestres
+            $s1 = 0.0;
+            $s2 = 0.0;
+            foreach ($prevision->months as $m) {
+                $mo  = (int) $m->month;
+                $amt = (float) $m->amount;
+                if ($mo >= 1 && $mo <= 6)       $s1 += $amt;
+                elseif ($mo >= 7 && $mo <= 12)  $s2 += $amt;
+            }
+
+            $totalN    = $s1 + $s2;
+            $totalN1   = $prevN1[$prevision->ligne_budget_id] ?? 0.0;
+            $variation = $totalN - $totalN1;
+
+            $row = [
+                'code'      => $code,
+                'libelle'   => $lb->intitule ?? ($lb->name ?? $code),
+                's1'        => $s1,
+                's2'        => $s2,
+                'total_n'   => $totalN,
+                'total_n1'  => $totalN1,
+                'variation' => $variation,
+            ];
+
+            if ($type === 'enc') {
+                $encaissements[] = $row;
+            } else {
+                $decaissements[] = $row;
+            }
+        }
+
+        // Trier par code
+        usort($encaissements, fn($a, $b) => strcmp($a['code'], $b['code']));
+        usort($decaissements, fn($a, $b) => strcmp($a['code'], $b['code']));
+
+        // Totaux généraux
+        $totEncN  = array_sum(array_column($encaissements, 'total_n'));
+        $totEncN1 = array_sum(array_column($encaissements, 'total_n1'));
+        $totDecN  = array_sum(array_column($decaissements, 'total_n'));
+        $totDecN1 = array_sum(array_column($decaissements, 'total_n1'));
+
+        $totEncS1 = array_sum(array_column($encaissements, 's1'));
+        $totEncS2 = array_sum(array_column($encaissements, 's2'));
+        $totDecS1 = array_sum(array_column($decaissements, 's1'));
+        $totDecS2 = array_sum(array_column($decaissements, 's2'));
+
+        $equilibre = $totEncN - $totDecN;
+
+        // Totaux N-1 indépendants (toutes lignes N-1, même sans correspondance en N)
+        $grandEncN1 = 0.0;
+        $grandDecN1 = 0.0;
+        foreach ($previsionsPrev as $p) {
+            $lb = $p->ligneBudget;
+            if (!$lb) continue;
+            $type = $classifyRow($lb);
+            if ($type === 'unknown') continue;
+            $total = 0.0;
+            foreach ($p->months as $m) {
+                $total += (float) $m->amount;
+            }
+            if ($type === 'enc') $grandEncN1 += $total;
+            else                  $grandDecN1 += $total;
+        }
+
+        return view('clients.pages.suivi_budgetaire.sous_budget', compact(
+            'year', 'yearPrev',
+            'encaissements', 'decaissements',
+            'totEncS1', 'totEncS2', 'totEncN', 'totEncN1',
+            'totDecS1', 'totDecS2', 'totDecN', 'totDecN1',
+            'grandEncN1', 'grandDecN1',
+            'equilibre'
+        ));
+    }
+
+    /**
      * Imprimer le suivi budgétaire
      */
     public function print(Request $request)

@@ -12,6 +12,8 @@
         </div>
     </div>
 
+    @include('clients.pages.configs.menu_config')
+
     <div class="row g-3">
         {{-- Formulaire --}}
         <div class="col-lg-4">

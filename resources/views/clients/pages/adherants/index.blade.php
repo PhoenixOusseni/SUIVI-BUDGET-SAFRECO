@@ -15,6 +15,8 @@
         </div>
     </div>
 
+    @include('clients.pages.configs.menu_config')
+
     <div class="table-card">
         <div class="table-card-header">
             <div class="tch-icon"><i class="fas fa-users"></i></div>

@@ -35,6 +35,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/suivi-budgetaire/suivi_budget', [BudgetController::class, 'index'])->name('budget.index');
     Route::get('/suivi-budgetaire/suivi_taux_execution_budgetaire', [BudgetController::class, 'execution'])->name('budget.execution');
     Route::get('/suivi-budgetaire/suivi_taux_consommation_subventions', [BudgetController::class, 'consommation'])->name('budget.consommation');
+    Route::get('/suivi-budgetaire/sous_budget_initial', [BudgetController::class, 'sousBudget'])->name('budget.sous_budget');
     // print suivi budget
     Route::get('/suivi-budgetaire/print', [BudgetController::class, 'print'])->name('budget.print');
 
