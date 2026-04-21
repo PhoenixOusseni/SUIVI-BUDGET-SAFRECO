@@ -1,19 +1,19 @@
 ﻿<style>
     :root {
-        --hdr-blue:     #003d82;
-        --hdr-dark:     #002560;
-        --hdr-orange:   #d54e14;
+        --hdr-blue:     #f0a800;
+        --hdr-dark:     #c47800;
+        --hdr-orange:   #003d82;
         --hdr-border:   #e8edf4;
         --hdr-text:     #0f172a;
         --hdr-muted:    #64748b;
-        --hdr-hover-bg: #f0f5ff;
+        --hdr-hover-bg: #fffbeb;
     }
     .hdr-ribbon {
         background: linear-gradient(90deg, var(--hdr-dark) 0%, var(--hdr-blue) 100%);
-        padding: .28rem 0; font-size: .75rem; color: rgba(255,255,255,.75);
+        padding: .28rem 0; font-size: .75rem; color: rgba(26,18,0,.75);
     }
-    .hdr-ribbon a { color: rgba(255,255,255,.8); text-decoration: none; transition: color .15s; }
-    .hdr-ribbon a:hover { color: #fff; }
+    .hdr-ribbon a { color: rgba(26,18,0,.8); text-decoration: none; transition: color .15s; }
+    .hdr-ribbon a:hover { color: #1a1200; }
     .hdr-ribbon .ribbon-dot {
         width: 6px; height: 6px; border-radius: 50%;
         background: var(--hdr-orange); display: inline-block;
@@ -21,9 +21,9 @@
     }
     .hdr-ribbon .ribbon-right { display: flex; align-items: center; gap: 1rem; }
     .hdr-ribbon .ribbon-badge {
-        background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.18);
+        background: rgba(0,0,0,.1); border: 1px solid rgba(0,0,0,.15);
         border-radius: 20px; padding: .1rem .6rem; font-size: .7rem; font-weight: 500;
-        color: rgba(255,255,255,.85); display: flex; align-items: center; gap: .3rem;
+        color: rgba(26,18,0,.85); display: flex; align-items: center; gap: .3rem;
     }
     .hdr-navbar {
         background: #fff; border-bottom: 1px solid var(--hdr-border);
@@ -34,9 +34,9 @@
     .hdr-brand { display: flex; align-items: center; gap: .65rem; text-decoration: none; padding: .6rem 0; flex-shrink: 0; }
     .hdr-brand-icon {
         width: 36px; height: 36px;
-        background: linear-gradient(135deg, var(--hdr-blue), #1a5bb0);
+        background: linear-gradient(135deg, var(--hdr-blue), var(--hdr-dark));
         border-radius: 9px; display: flex; align-items: center; justify-content: center;
-        color: #fff; font-size: 1rem; flex-shrink: 0;
+        color: #0f172a; font-size: 1rem; flex-shrink: 0;
     }
     .hdr-brand-text { line-height: 1.15; }
     .hdr-brand-name { font-size: .9rem; font-weight: 700; color: var(--hdr-text); letter-spacing: -.3px; display: block; }
@@ -52,7 +52,7 @@
         transition: color .15s, border-color .15s, background .15s; height: 100%;
     }
     .hdr-nav .hdr-link:hover, .hdr-nav .hdr-link.active {
-        color: var(--hdr-blue); border-bottom-color: var(--hdr-blue); background: var(--hdr-hover-bg);
+        color: #0f172a; border-bottom-color: var(--hdr-blue); background: var(--hdr-hover-bg);
     }
     .hdr-nav .hdr-link .hdr-link-icon { font-size: .9rem; opacity: .8; }
     .hdr-nav .hdr-link .hdr-chevron { font-size: .65rem; opacity: .6; margin-left: .15rem; transition: transform .2s; }
@@ -76,8 +76,8 @@
         transition: background .12s, color .12s; border-radius: 6px; margin: 0 .3rem;
     }
     .hdr-dropdown-item i { font-size: .85rem; color: var(--hdr-muted); width: 16px; text-align: center; }
-    .hdr-dropdown-item:hover { background: var(--hdr-hover-bg); color: var(--hdr-blue); }
-    .hdr-dropdown-item:hover i { color: var(--hdr-blue); }
+    .hdr-dropdown-item:hover { background: var(--hdr-hover-bg); color: #0f172a; }
+    .hdr-dropdown-item:hover i { color: var(--hdr-dark); }
     .hdr-dropdown-sep { height: 1px; background: var(--hdr-border); margin: .3rem .5rem; }
     .hdr-actions { display: flex; align-items: center; gap: .5rem; flex-shrink: 0; margin-left: auto; }
     .hdr-user-btn {
@@ -88,9 +88,9 @@
     .hdr-user-btn:hover { background: var(--hdr-hover-bg); border-color: #c7d4e8; }
     .hdr-avatar {
         width: 30px; height: 30px; border-radius: 7px;
-        background: linear-gradient(135deg, var(--hdr-blue), #1a5bb0);
+        background: linear-gradient(135deg, var(--hdr-blue), var(--hdr-dark));
         display: flex; align-items: center; justify-content: center;
-        color: #fff; font-size: .8rem; font-weight: 700; flex-shrink: 0;
+        color: #0f172a; font-size: .8rem; font-weight: 700; flex-shrink: 0;
     }
     .hdr-user-info { line-height: 1.2; text-align: left; }
     .hdr-user-name  { font-size: .78rem; font-weight: 600; color: var(--hdr-text); display: block; }
@@ -117,16 +117,16 @@
         text-align: left; font-family: inherit;
     }
     .hdr-user-dd-item i { width: 15px; text-align: center; color: var(--hdr-muted); }
-    .hdr-user-dd-item:hover { background: var(--hdr-hover-bg); color: var(--hdr-blue); }
+    .hdr-user-dd-item:hover { background: var(--hdr-hover-bg); color: #0f172a; }
     .hdr-user-dd-item.danger { color: #ef4444; }
     .hdr-user-dd-item.danger i { color: #ef4444; }
     .hdr-user-dd-item.danger:hover { background: #fff5f5; }
     .hdr-login-link {
         display: flex; align-items: center; gap: .4rem; padding: .4rem .85rem;
-        font-size: .8rem; font-weight: 600; color: var(--hdr-blue); text-decoration: none;
-        border: 1px solid var(--hdr-blue); border-radius: 8px; transition: background .15s, color .15s;
+        font-size: .8rem; font-weight: 600; color: var(--hdr-orange); text-decoration: none;
+        border: 1px solid var(--hdr-orange); border-radius: 8px; transition: background .15s, color .15s;
     }
-    .hdr-login-link:hover { background: var(--hdr-blue); color: #fff; }
+    .hdr-login-link:hover { background: var(--hdr-orange); color: #fff; }
     .hdr-toggler {
         background: none; border: 1px solid var(--hdr-border); border-radius: 7px;
         padding: .4rem .55rem; cursor: pointer; display: none; align-items: center;

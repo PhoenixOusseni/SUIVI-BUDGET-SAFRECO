@@ -22,13 +22,13 @@
         *, *::before, *::after { box-sizing: border-box; }
 
         :root {
-            --brand-blue:   #003d82;
-            --brand-dark:   #002560;
-            --brand-orange: #d54e14;
-            --brand-orange-light: #f07044;
+            --brand-blue:   #f0a800;
+            --brand-dark:   #c47800;
+            --brand-orange: #003d82;
+            --brand-orange-light: #1a5bb0;
             --text-muted:   #6b7280;
             --input-border: #d1d5db;
-            --input-focus:  #003d82;
+            --input-focus:  #f0a800;
             --radius:       14px;
         }
 
@@ -49,7 +49,7 @@
         /* ── LEFT PANEL ── */
         .auth-panel-left {
             flex: 1;
-            background: linear-gradient(145deg, var(--brand-dark) 0%, var(--brand-blue) 55%, #1a5bb0 100%);
+            background: linear-gradient(145deg, var(--brand-dark) 0%, var(--brand-blue) 55%, #f5c000 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -80,18 +80,18 @@
 
         .brand-icon {
             width: 80px; height: 80px;
-            background: rgba(255,255,255,.15);
-            border: 2px solid rgba(255,255,255,.25);
+            background: rgba(0,0,0,.15);
+            border: 2px solid rgba(0,0,0,.2);
             border-radius: 22px;
             display: flex; align-items: center; justify-content: center;
             font-size: 2.2rem;
-            color: #fff;
+            color: #0f172a;
             margin-bottom: 1.75rem;
             backdrop-filter: blur(6px);
         }
 
         .brand-title {
-            color: #fff;
+            color: #0f172a;
             font-size: 1.85rem;
             font-weight: 700;
             letter-spacing: -.5px;
@@ -100,7 +100,7 @@
         }
 
         .brand-subtitle {
-            color: rgba(255,255,255,.65);
+            color: rgba(15,23,42,.65);
             font-size: .92rem;
             text-align: center;
             max-width: 280px;
@@ -114,11 +114,11 @@
         }
 
         .brand-badge-item {
-            background: rgba(255,255,255,.1);
-            border: 1px solid rgba(255,255,255,.2);
+            background: rgba(0,0,0,.1);
+            border: 1px solid rgba(0,0,0,.15);
             border-radius: 8px;
             padding: .5rem .9rem;
-            color: rgba(255,255,255,.85);
+            color: rgba(15,23,42,.85);
             font-size: .78rem;
             font-weight: 500;
             display: flex;
@@ -208,7 +208,7 @@
         .field-group input:focus {
             border-color: var(--input-focus);
             background: #fff;
-            box-shadow: 0 0 0 3px rgba(0,61,130,.1);
+            box-shadow: 0 0 0 3px rgba(240,168,0,.2);
         }
 
         .field-group input:focus + .field-icon-label,
@@ -257,8 +257,8 @@
         .btn-login {
             width: 100%;
             height: 52px;
-            background: linear-gradient(135deg, var(--brand-blue) 0%, #1a5bb0 100%);
-            color: #fff;
+            background: linear-gradient(135deg, var(--brand-blue) 0%, #c47800 100%);
+            color: #0f172a;
             border: none;
             border-radius: 10px;
             font-size: .95rem;
@@ -271,13 +271,13 @@
             gap: .55rem;
             margin-top: 1.75rem;
             transition: transform .15s, box-shadow .2s, filter .2s;
-            box-shadow: 0 4px 18px rgba(0,61,130,.28);
+            box-shadow: 0 4px 18px rgba(240,168,0,.35);
             letter-spacing: .3px;
         }
 
         .btn-login:hover {
             filter: brightness(1.08);
-            box-shadow: 0 6px 22px rgba(0,61,130,.38);
+            box-shadow: 0 6px 22px rgba(240,168,0,.45);
             transform: translateY(-1px);
         }
 

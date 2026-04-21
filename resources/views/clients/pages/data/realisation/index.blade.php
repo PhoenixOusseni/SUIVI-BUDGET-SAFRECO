@@ -128,7 +128,7 @@
 {{-- Import Modal --}}
 <div class="modal fade" id="importModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content" style="border-radius:14px; border:none; box-shadow:0 8px 32px rgba(0,61,130,.15);">
+        <div class="modal-content" style="border-radius:14px; border:none; box-shadow:0 8px 32px rgba(240,168,0,.2);">
             <div class="modal-header modal-header-blue">
                 <h5 class="modal-title"><i class="fas fa-file-import me-2"></i>Importer des réalisations</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>

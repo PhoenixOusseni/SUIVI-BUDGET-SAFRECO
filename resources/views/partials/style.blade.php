@@ -16,7 +16,7 @@
     }
 
     .navbar-custom {
-        background: linear-gradient(40deg, #f3934f, #d54e14);
+        background: linear-gradient(40deg, #f0a800, #c47800);
     }
 
     .navbar-custom-brand {
@@ -25,31 +25,69 @@
     }
 
     .btn-red {
-        background-color: #d54e14;
+        background-color: #003d82;
         color: #fff;
     }
 
     .btn-red:hover {
-        background-color: #a10000;
+        background-color: #002560;
         color: #fff;
     }
 
     footer {
-        background-color: #003d82;
+        background: linear-gradient(135deg, #f0a800 0%, #003d82 100%);
         color: #fff;
-        padding: 15px;
+        padding: 22px 15px 18px;
         position: relative;
+        overflow: hidden;
+    }
+
+    /* Filigrane — grand texte en arrière-plan */
+    footer::before {
+        content: 'SAFRECO';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(-15deg);
+        font-size: 5rem;
+        font-weight: 900;
+        letter-spacing: .25em;
+        color: rgba(255, 255, 255, .06);
+        pointer-events: none;
+        white-space: nowrap;
+        user-select: none;
+    }
+
+    /* Cercles décoratifs */
+    footer::after {
+        content: '';
+        position: absolute;
+        top: -40px;
+        right: -40px;
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, .05);
+        pointer-events: none;
+    }
+
+    footer p {
+        position: relative;
+        z-index: 1;
+        margin: 0;
+        line-height: 1.8;
     }
 
     footer .highlight {
-        color: #d54e14;
+        color: #ffe082;
+        font-weight: 700;
     }
 
     .admin-btn {
         position: absolute;
         bottom: 10px;
         right: 20px;
-        background: #d54e14;
+        background: #003d82;
         padding: 8px 15px;
         border-radius: 5px;
         color: white;
@@ -68,10 +106,10 @@
 <style>
     /* ── Page variables ────────────────────────────────────── */
     :root {
-        --blue: #003d82;
-        --orange: #d54e14;
+        --blue: #f0a800;
+        --orange: #003d82;
         --green: #16a34a;
-        --yellow: #ca8a04;
+        --yellow: #f0a800;
         --red: #dc2626;
         --surface: #f8fafc;
         --border: #e2e8f0;
@@ -80,19 +118,32 @@
 
     /* ── Page header ───────────────────────────────────────── */
     .page-hero {
-        background: linear-gradient(135deg, var(--blue) 0%, #1a5bb0 100%);
+        background: linear-gradient(135deg, #f0a800 0%, #003d82 100%);
         border-radius: 5px;
         padding: 1.6rem 2rem;
         margin-bottom: 1.5rem;
         color: #fff;
         position: relative;
         overflow: hidden;
+        box-shadow: 0 4px 18px rgba(0, 61, 130, .18);
+    }
+
+    .page-hero::before {
+        content: '';
+        position: absolute;
+        top: -50px;
+        left: -50px;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, .08);
+        pointer-events: none;
     }
 
     .page-hero::after {
         content: '';
         position: absolute;
-        top: -40px;
+        bottom: -40px;
         right: -40px;
         width: 180px;
         height: 180px;
@@ -106,24 +157,28 @@
         font-weight: 700;
         margin: 0;
         letter-spacing: -.3px;
+        color: #fff;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, .15);
     }
 
     .page-hero .hero-sub {
         font-size: .82rem;
-        opacity: .75;
+        opacity: .85;
         margin-top: .25rem;
+        color: rgba(255, 255, 255, .9);
     }
 
     .page-hero .hero-badge {
         display: inline-flex;
         align-items: center;
         gap: .35rem;
-        background: rgba(255, 255, 255, .15);
-        border: 1px solid rgba(255, 255, 255, .25);
+        background: rgba(255, 255, 255, .18);
+        border: 1px solid rgba(255, 255, 255, .3);
         border-radius: 5px;
         padding: .22rem .75rem;
         font-size: .75rem;
         font-weight: 600;
+        color: #fff;
     }
 
     /* ── Toolbar card ───────────────────────────────────────── */
@@ -160,13 +215,13 @@
 
     .toolbar-card .form-select:focus {
         border-color: var(--blue);
-        box-shadow: 0 0 0 3px rgba(0, 61, 130, .1);
+        box-shadow: 0 0 0 3px rgba(240, 168, 0, .2);
     }
 
     /* ── Buttons ────────────────────────────────────────────── */
     .btn-primary-custom {
         background: var(--blue);
-        color: #fff;
+        color: #0f172a;
         border: none;
         border-radius: 5px;
         padding: .42rem 1rem;
@@ -180,7 +235,7 @@
 
     .btn-primary-custom:hover {
         opacity: .88;
-        color: #fff;
+        color: #0f172a;
         transform: translateY(-1px);
     }
 
@@ -219,7 +274,7 @@
     }
 
     .btn-print:hover {
-        background: #eff6ff;
+        background: #fffbeb;
         color: var(--blue);
         transform: translateY(-1px);
     }
@@ -247,11 +302,11 @@
         width: 34px;
         height: 34px;
         border-radius: 5px;
-        background: linear-gradient(135deg, var(--blue), #1a5bb0);
+        background: linear-gradient(135deg, var(--blue), #c47800);
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #fff;
+        color: #0f172a;
         font-size: .9rem;
         flex-shrink: 0;
     }
@@ -276,8 +331,8 @@
     }
 
     .table-exec thead tr:first-child th {
-        background: linear-gradient(135deg, var(--blue) 0%, #1a5bb0 100%);
-        color: #fff;
+        background: linear-gradient(135deg, var(--blue) 0%, #c47800 100%);
+        color: #0f172a;
         font-weight: 600;
         padding: .65rem .5rem;
         position: sticky;
@@ -345,8 +400,8 @@
 
     /* ── Standard table (non-wide) ──────────────────────── */
     .table-std thead th {
-        background: linear-gradient(135deg, var(--blue) 0%, #1a5bb0 100%);
-        color: #fff; font-weight: 600; font-size: .78rem;
+        background: linear-gradient(135deg, var(--blue) 0%, #c47800 100%);
+        color: #0f172a; font-weight: 600; font-size: .78rem;
         padding: .6rem .75rem; border: none; white-space: nowrap;
     }
     .table-std tbody td { font-size: .82rem; vertical-align: middle; border-color: var(--border); }
@@ -364,9 +419,9 @@
     }
     .form-card-header .fch-icon {
         width: 32px; height: 32px; border-radius: 5px;
-        background: linear-gradient(135deg, var(--blue), #1a5bb0);
+        background: linear-gradient(135deg, var(--blue), #c47800);
         display: flex; align-items: center; justify-content: center;
-        color: #fff; font-size: .85rem; flex-shrink: 0;
+        color: #0f172a; font-size: .85rem; flex-shrink: 0;
     }
     .form-card-header .fch-title { font-size: .9rem; font-weight: 700; color: #0f172a; margin: 0; }
     .form-card-body { padding: 1.4rem; }
@@ -379,7 +434,7 @@
         transition: border-color .15s, box-shadow .15s;
     }
     .form-card .form-control:focus, .form-card .form-select:focus {
-        border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,61,130,.1); outline: none;
+        border-color: var(--blue); box-shadow: 0 0 0 3px rgba(240,168,0,.2); outline: none;
     }
     .form-card .form-control:disabled, .form-card .form-select:disabled {
         background: #f8fafc; color: #94a3b8;
@@ -426,7 +481,7 @@
         display: inline-flex; align-items: center; gap: .3rem;
         padding: .2rem .65rem; border-radius: 5px; font-size: .72rem; font-weight: 600; white-space: nowrap;
     }
-    .status-badge.blue   { background: #eff6ff; color: var(--blue); }
+    .status-badge.blue   { background: #fffbeb; color: var(--blue); }
     .status-badge.green  { background: #f0fdf4; color: var(--green); }
     .status-badge.orange { background: #fff7ed; color: var(--orange); }
     .status-badge.red    { background: #fef2f2; color: var(--red); }
@@ -449,10 +504,10 @@
 
     /* ── Modal header override ───────────────────────────── */
     .modal-header-blue {
-        background: linear-gradient(135deg, var(--blue), #1a5bb0);
-        color: #fff; border-bottom: none;
+        background: linear-gradient(135deg, var(--blue), #c47800);
+        color: #0f172a; border-bottom: none;
     }
-    .modal-header-blue .btn-close { filter: invert(1); }
+    .modal-header-blue .btn-close { filter: none; }
     .modal-header-blue .modal-title { font-size: .95rem; font-weight: 700; }
 </style>
 

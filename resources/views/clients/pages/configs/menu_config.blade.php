@@ -31,18 +31,18 @@
         transition: color .15s;
     }
     .cfg-nav-item:hover {
-        background: #f0f5ff;
-        color: #003d82;
-        border-color: #c8d9f5;
+        background: #fffbeb;
+        color: #c47800;
+        border-color: #f5d580;
     }
-    .cfg-nav-item:hover i { color: #003d82; }
+    .cfg-nav-item:hover i { color: #c47800; }
     .cfg-nav-item.active {
-        background: linear-gradient(135deg, #003d82, #1a5bb0);
-        color: #fff;
+        background: linear-gradient(135deg, #f0a800, #c47800);
+        color: #0f172a;
         border-color: transparent;
-        box-shadow: 0 3px 10px rgba(0,61,130,.25);
+        box-shadow: 0 3px 10px rgba(240,168,0,.3);
     }
-    .cfg-nav-item.active i { color: #fff; }
+    .cfg-nav-item.active i { color: #0f172a; }
     .cfg-nav-sep {
         width: 1px; height: 22px;
         background: #e2e8f0;

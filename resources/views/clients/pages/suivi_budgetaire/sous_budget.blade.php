@@ -27,11 +27,11 @@
 
     <style>
         .sb-page-hero {
-            background: linear-gradient(135deg, #003d82 0%, #1a5bb0 100%);
+            background: linear-gradient(135deg, #f0a800 0%, #c47800 100%);
             border-radius: 12px;
             padding: 1.25rem 1.5rem;
             margin-bottom: 1.5rem;
-            color: #fff;
+            color: #0f172a;
         }
 
         .sb-hero-title {
@@ -67,8 +67,8 @@
         }
 
         .sb-btn-filter {
-            background: #003d82;
-            color: #fff;
+            background: #f0a800;
+            color: #0f172a;
             border: none;
             padding: .38rem .95rem;
             border-radius: 7px;
@@ -82,7 +82,7 @@
         }
 
         .sb-btn-filter:hover {
-            background: #002560;
+            background: #c47800;
         }
 
         /* Table wrapper */
@@ -96,8 +96,8 @@
         }
 
         .sb-card-header {
-            background: linear-gradient(90deg, #003d82 0%, #1a5bb0 100%);
-            color: #fff;
+            background: linear-gradient(90deg, #f0a800 0%, #c47800 100%);
+            color: #0f172a;
             padding: .75rem 1.1rem;
             display: flex;
             align-items: center;

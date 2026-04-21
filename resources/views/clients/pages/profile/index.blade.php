@@ -33,7 +33,7 @@
                     <div class="form-card-body">
                         <div class="d-flex align-items-center gap-3">
                             <div class="d-flex align-items-center justify-content-center rounded-circle"
-                                style="width:64px; height:64px; background:linear-gradient(135deg, var(--blue), #1a5bb0); color:#fff; font-size:1.6rem;">
+                                style="width:64px; height:64px; background:linear-gradient(135deg, var(--blue), #c47800); color:#0f172a; font-size:1.6rem;">
                                 <i class="fas fa-user"></i>
                             </div>
                             <div>
@@ -100,7 +100,7 @@
     {{-- Modal Modifier --}}
     <div class="modal fade" id="editProfileModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content" style="border-radius:14px; border:none; box-shadow:0 8px 32px rgba(0,61,130,.15);">
+            <div class="modal-content" style="border-radius:14px; border:none; box-shadow:0 8px 32px rgba(240,168,0,.2);">
                 <div class="modal-header modal-header-blue">
                     <h5 class="modal-title text-white"><i class="fas fa-edit me-2 text-white"></i>Modifier mon profil</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>

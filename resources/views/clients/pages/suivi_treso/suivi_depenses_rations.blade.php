@@ -84,7 +84,7 @@
                                 @endforeach
                             </tr>
                         @endforeach
-                        <tr style="background:rgba(0,61,130,.07);">
+                        <tr style="background:rgba(240,168,0,.1);">`
                             <td><strong>{{ $codeBudget->code }}</strong></td>
                             <td><strong><em>Total {{ $codeBudget->intitule }}</em></strong></td>
                             @foreach (range(1, 12) as $month)

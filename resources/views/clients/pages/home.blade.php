@@ -7,10 +7,10 @@
 ══════════════════════════════════════════════════════ --}}
 <style>
     :root {
-        --primary:       #003d82;
-        --primary-light: #1a5bb0;
-        --orange:        #d54e14;
-        --orange-light:  #f07044;
+        --primary:       #f0a800;
+        --primary-light: #c47800;
+        --orange:        #003d82;
+        --orange-light:  #1a5bb0;
         --green:         #16a34a;
         --green-light:   #22c55e;
         --purple:        #7c3aed;
@@ -48,7 +48,7 @@
     .db-header-left h1 span { color: var(--orange); }
     .db-header-left p { margin: .1rem 0 0; font-size: .82rem; color: var(--text-muted); }
     .db-year-badge {
-        background: var(--primary); color: #fff;
+        background: var(--primary); color: #0f172a;
         padding: .35rem .9rem; border-radius: 20px;
         font-size: .8rem; font-weight: 600; letter-spacing: .5px;
         display: flex; align-items: center; gap: .4rem;
@@ -87,8 +87,8 @@
         display: flex; align-items: center; justify-content: center;
         font-size: 1.15rem; flex-shrink: 0;
     }
-    .kpi-icon.blue   { background: #eff6ff; color: var(--primary); }
-    .kpi-icon.orange { background: #fff7ed; color: var(--orange); }
+    .kpi-icon.blue   { background: #fffbeb; color: var(--primary); }
+    .kpi-icon.orange { background: #eff6ff; color: var(--orange); }
     .kpi-icon.green  { background: #f0fdf4; color: var(--green); }
     .kpi-icon.purple { background: #f5f3ff; color: var(--purple); }
     .kpi-icon.teal   { background: #ecfeff; color: var(--teal); }
@@ -198,8 +198,8 @@
         padding: .22rem .6rem; border-radius: 20px;
         font-size: .7rem; font-weight: 600; white-space: nowrap;
     }
-    .ops-badge.blue   { background: #eff6ff; color: var(--primary); }
-    .ops-badge.orange { background: #fff7ed; color: var(--orange); }
+    .ops-badge.blue   { background: #fffbeb; color: var(--primary); }
+    .ops-badge.orange { background: #eff6ff; color: var(--orange); }
     .ops-amount { font-weight: 600; color: var(--text-main); }
     .ops-no-data {
         text-align: center; padding: 2.5rem; color: var(--text-muted);
@@ -232,9 +232,9 @@
         border-radius: 20px; white-space: nowrap; flex-shrink: 0;
     }
     .tache-pct-badge.done   { background: #f0fdf4; color: var(--green); }
-    .tache-pct-badge.good   { background: #eff6ff; color: var(--primary); }
+    .tache-pct-badge.good   { background: #fffbeb; color: var(--primary); }
     .tache-pct-badge.mid    { background: #fffbeb; color: var(--amber); }
-    .tache-pct-badge.low    { background: #fff7ed; color: var(--orange); }
+    .tache-pct-badge.low    { background: #eff6ff; color: var(--orange); }
     .tache-progress-bar { height: 6px; background: #e2e8f0; border-radius: 99px; overflow: hidden; }
     .tache-progress-fill { height: 100%; border-radius: 99px; transition: width .5s ease; }
     .tache-footer {
@@ -605,7 +605,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 {
                     label: 'Prévisions',
                     data: prevData,
-                    backgroundColor: 'rgba(0,61,130,.75)',
+                    backgroundColor: 'rgba(240,168,0,.8)',
                     borderRadius: 5,
                     borderSkipped: false,
                     barPercentage: .75,
@@ -613,7 +613,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 {
                     label: 'Réalisations',
                     data: realData,
-                    backgroundColor: 'rgba(213,78,20,.75)',
+                    backgroundColor: 'rgba(0,61,130,.8)',
                     borderRadius: 5,
                     borderSkipped: false,
                     barPercentage: .75,
@@ -657,8 +657,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 {
                     label: 'Prévisions cumulées',
                     data: cumPrev,
-                    borderColor: '#003d82',
-                    backgroundColor: 'rgba(0,61,130,.08)',
+                    borderColor: '#f0a800',
+                    backgroundColor: 'rgba(240,168,0,.08)',
                     fill: true,
                     tension: .4,
                     pointRadius: 3,
@@ -667,8 +667,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 {
                     label: 'Réalisations cumulées',
                     data: cumReal,
-                    borderColor: '#d54e14',
-                    backgroundColor: 'rgba(213,78,20,.08)',
+                    borderColor: '#003d82',
+                    backgroundColor: 'rgba(0,61,130,.08)',
                     fill: true,
                     tension: .4,
                     pointRadius: 3,

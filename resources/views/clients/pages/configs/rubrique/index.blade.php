@@ -20,7 +20,7 @@
     {{-- Modal Ajout --}}
     <div class="modal fade" id="addRubriqueModal" tabindex="-1" aria-labelledby="addRubriqueModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content" style="border-radius:14px; border:none; box-shadow:0 8px 32px rgba(0,61,130,.15);">
+            <div class="modal-content" style="border-radius:14px; border:none; box-shadow:0 8px 32px rgba(240,168,0,.2);">
                 <div class="modal-header modal-header-blue">
                     <h5 class="modal-title text-white" id="addRubriqueModalLabel"><i class="fas fa-plus me-2" class="text-white"></i>Nouvelle rubrique</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
